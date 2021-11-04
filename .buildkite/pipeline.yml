@@ -1,0 +1,43 @@
+---
+docker: &docker
+  docker#v3.0.1:
+    user: buildkite
+    always-pull: true
+    image: library.pdx.aws.av.lyft.net/ci/ci-cpp:stable
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/buildkite-agent/.ssh/:/home/buildkite/.ssh/
+    environment:
+      - BUILDKITE_BRANCH
+      - BUILDKITE_BUILD_NUMBER
+      - BUILDKITE_PIPELINE_SLUG
+      - BUILDKITE_ORGANIZATION_SLUG
+      - BUILDKITE_VAULTBUILDKITEPLUGIN_INFRA_NEXUS_BUILDKITE_USERNAME
+      - BUILDKITE_VAULTBUILDKITEPLUGIN_INFRA_NEXUS_BUILDKITE_PASSWORD
+      - BUILDKITE_VAULTBUILDKITEPLUGIN_INFRA_GITHUB_LYFT_AUTONOMOUS_CI_PASSWORD
+
+vault: &vault
+  ssh://github.com-vbkp/lyft/vaultbuildkiteplugin#v0.1.0:
+    domain: vault.pdx.l5.woven-planet.tech
+    secrets:
+      - infra/nexus/buildkite=username
+      - infra/nexus/buildkite=password
+      - infra/github/lyft-autonomous-ci=password
+
+retries: &retries
+  automatic:
+    - exit_status: 128
+      limit: 3
+
+steps:
+  - label: "Unit Tests"
+    timeout: 5
+    agents:
+      queue: cpu-small
+    command: .buildkite/env_setup.sh && bazel test src/...
+    retry:
+      <<: *retries
+    plugins:
+      <<: *vault
+      <<: *docker
+
