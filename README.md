@@ -3,7 +3,7 @@ Structured Logging
 
 # Contributing
 ## Running tests
-Run `bazel test --test_output=errors src/...` to run all unit tests.
+* `bazel test --test_output=errors src/...` -- run all unit tests.
 
 ## Code formatting
-Run `./lint ./ -i` to automatically format all code.
+* `./lint.sh ./ -i` -- automatically format all code.
