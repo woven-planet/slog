@@ -4,7 +4,7 @@
 #   ./lint.sh <path> [-i]
 #   e.g.
 #     ./lint.sh ./
-#     ./lint.sh src/slog/primitives/ -i 
+#     ./lint.sh src/primitives/ -i 
 
 find $1 -name *.h > /tmp/files_to_lint
 find $1 -name *.cc >> /tmp/files_to_lint
