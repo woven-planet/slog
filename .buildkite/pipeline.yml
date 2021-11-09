@@ -30,22 +30,36 @@ retries: &retries
       limit: 3
 
 steps:
-  - label: "Lint"
+  - label: ":hammer: Lint"
     timeout: 5
     agents:
       queue: cpu-small
-    command: .buildkite/env_setup.sh && ./lint.sh ./
+    command: sudo apt update && sudo apt install clang-format -y && ./lint.sh ./
     retry:
       <<: *retries
     plugins:
       <<: *vault
       <<: *docker
 
-  - label: "Unit Tests"
+  - label: ":hammer: Unit Tests"
     timeout: 5
     agents:
       queue: cpu-small
-    command: .buildkite/env_setup.sh && bazel test --test_output=errors src/...
+    command: .buildkite/install_bazel.sh && bazel test --test_output=errors src/...
+    retry:
+      <<: *retries
+    plugins:
+      <<: *vault
+      <<: *docker
+
+  - wait
+
+  - label: ":ship: Release"
+    timeout: 5
+    agents:
+      queue: cpu-small
+    branches: main
+    command: sudo apt update && sudo apt install zip -y && ./zip_and_upload_to_artifactory.sh v0.2.${BUILDKITE_BUILD_NUMBER}
     retry:
       <<: *retries
     plugins:
