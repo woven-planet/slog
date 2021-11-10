@@ -1,0 +1,37 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "slog",
+    hdrs = [
+        # TODO(vsbus): find a right way to add all hdrs here automatically
+        "//src/buffer:buffer.h",
+        "//src/buffer:buffer_data.h",
+        "//src/context:context.h",
+        "//src/context:notification_queue.h",
+        "//src/context:subscribers.h",
+        "//src/events:event.h",
+        "//src/events:scope.h",
+        "//src/primitives:call_site.h",
+        "//src/primitives:record.h",
+        "//src/primitives:tag.h",
+        "//src/primitives:timestamps.h",
+        "//src/printer:printer.h",
+        "//src/util:inline_macro.h",
+        "//src/util:string_util.h",
+        "//src:slog.h",
+    ],
+    copts = [
+        # max optimizations
+        "-O3",
+    ],
+    # We strip `src/` and add `slog/` prefix to make all files included like `#include <slog/slog.h>` in a target repo.
+    strip_include_prefix = "src",
+    include_prefix = "slog",
+    includes = ["src"],
+    # TODO(vsbus): find a way to make all files under deps invisible. For now users still can do `#include "external/src/slog.h" that is not cool.
+    deps = [
+        "//src/buffer:buffer_cc",
+        "//src:slog_cc",
+    ],
+)
+
