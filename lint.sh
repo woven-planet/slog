@@ -4,19 +4,33 @@
 #   ./lint.sh <path> [-i]
 #   e.g.
 #     ./lint.sh ./
-#     ./lint.sh src/primitives/ -i 
+#     ./lint.sh slog/primitives/ -i 
 
-find $1 -name *.h > /tmp/files_to_lint
-find $1 -name *.cc >> /tmp/files_to_lint
+set -e
+
+find $1 -name *.h > /tmp/files_to_lint_cc
+find $1 -name *.cc >> /tmp/files_to_lint_cc
+find $1 -name *.py >> /tmp/files_to_lint_py
 
 if [[ ! -z "$2" ]] && [ "$2" == "-i" ]
 then
-    cat /tmp/files_to_lint | xargs -d $'\n' sh -c 'for arg do clang-format -style=Google -i $arg; done' _
+    # Lint-fix Bazel files.
+    buildifier --mode=fix -r $1
+    # Lint-fix C++ files.
+    cat /tmp/files_to_lint_cc | xargs -d $'\n' sh -c 'for arg do clang-format -style=Google -i $arg; done' _
+    # Lint-fix Python files.
+    cat /tmp/files_to_lint_py | xargs autopep8 --in-place $arg
 fi
 
-touch /tmp/diff
-rm /tmp/diff
-cat /tmp/files_to_lint | xargs -d $'\n' sh -c 'for arg do clang-format -style=Google $arg >/tmp/formated; diff --unified=0 $arg /tmp/formated >>/tmp/diff; done' _
+touch /tmp/diff && rm /tmp/diff
+touch /tmp/formated && rm /tmp/formated
+
+# Find lint errors in Bazel files.
+buildifier --mode=diff -r $1
+# Find lint errors in C++ files.
+cat /tmp/files_to_lint_cc | xargs -d $'\n' sh -c 'for arg do clang-format -style=Google $arg >/tmp/formated && diff --unified=0 $arg /tmp/formated >>/tmp/diff; done' _
+# Find lint errors in Python files.
+cat /tmp/files_to_lint_py | xargs autopep8 --diff $arg >>/tmp/diff
 
 cat /tmp/diff
 if [ -s /tmp/diff ]

@@ -34,7 +34,7 @@ steps:
     timeout: 5
     agents:
       queue: cpu-small
-    command: sudo apt update && sudo apt install clang-format -y && ./lint.sh ./
+    command: .buildkite/install_linters.sh && ./lint.sh ./
     retry:
       <<: *retries
     plugins:
@@ -45,7 +45,7 @@ steps:
     timeout: 5
     agents:
       queue: cpu-small
-    command: .buildkite/install_bazel.sh && bazel test --test_output=errors src/...
+    command: .buildkite/setup_env.sh && bazel test --test_output=errors //... && bazel build //...
     retry:
       <<: *retries
     plugins:
@@ -58,11 +58,45 @@ steps:
     timeout: 5
     agents:
       queue: cpu-small
-    branches: main
-    command: sudo apt update && sudo apt install zip -y && ./zip_and_upload_to_artifactory.sh v0.2.${BUILDKITE_BUILD_NUMBER}
+      # branches: main
+    commands:
+      - "sudo apt update"
+      - "sudo apt install zip -y"
+      - "./zip_and_upload_to_artifactory.sh $(cat VERSION).${BUILDKITE_BUILD_NUMBER}"
     retry:
       <<: *retries
     plugins:
       <<: *vault
       <<: *docker
 
+  - wait
+
+  - label: ":rocket: System Test: Import slog_cc"
+    timeout: 5
+    agents:
+      queue: cpu-small
+    commands:
+      - ".buildkite/setup_env.sh"
+      - "cd test_import/example_project_cc/"
+      - "./prepare_workspace.sh $(cat ../../VERSION).${BUILDKITE_BUILD_NUMBER}"
+      - "bazel test --test_output=errors src:slog_cc_test"
+    retry:
+      <<: *retries
+    plugins:
+      <<: *vault
+      <<: *docker
+
+  - label: ":rocket: System Test: Import slog_py"
+    timeout: 5
+    agents:
+      queue: cpu-small
+    commands:
+      - ".buildkite/setup_env.sh"
+      - "cd test_import/example_project_py/"
+      - "./prepare_workspace.sh $(cat ../../VERSION).${BUILDKITE_BUILD_NUMBER}"
+      - "bazel test --test_output=errors src:slog_py_test"
+    retry:
+      <<: *retries
+    plugins:
+      <<: *vault
+      <<: *docker

@@ -1,0 +1,48 @@
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+# To import slog into a project we simply need to fetch it using http_archive.
+http_archive(
+    name = "slog",
+    url = "https://artifactory.pdx.l5.woven-planet.tech/repository/mothership/slog/slog-<version>.zip",
+)
+
+# Note, importing Slog project does not import its transitive deependencies
+# (e.g. pybind11), so we have to import them separately below.
+
+######## Configuring Python Toolchain begin ########
+
+# Importing python_build_standalone archive that will be used as a python
+# interpreter for bazel builds and for pybind11_bazel.
+load("//python_toolchain:fetch_python_build_standalone.bzl", "fetch_python_build_standalone")
+fetch_python_build_standalone(name = "python_build_standalone")
+
+# Register python3 interpreter from python_build_standalone to be used by bazel builds.
+register_toolchains("//python_toolchain")
+
+######## Configuring Python Toolchain end ########
+
+
+######## Importing pybind11 begin ########
+
+http_archive(
+  name = "pybind11",
+  build_file = "@pybind11_bazel//:pybind11.BUILD",
+  strip_prefix = "pybind11-2.5.0",
+  urls = ["https://github.com/pybind/pybind11/archive/v2.5.0.tar.gz"],
+)
+
+http_archive(
+  name = "pybind11_bazel",
+  sha256 = "3dc6435bd41c058453efe102995ef084d0a86b0176fd6a67a6b7100a2e9a940e",
+  strip_prefix = "pybind11_bazel-992381ced716ae12122360b0fbadbc3dda436dbf",
+  urls = ["https://github.com/pybind/pybind11_bazel/archive/992381ced716ae12122360b0fbadbc3dda436dbf.zip"],
+)
+
+load("@pybind11_bazel//:python_configure.bzl", "python_configure")
+python_configure(
+  name = "local_config_python",
+  python_interpreter_target = "@python_build_standalone//:python/install/bin/python3.8",
+)
+
+######## Importing pybind11 end ########
+

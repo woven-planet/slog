@@ -1,37 +1,57 @@
 package(default_visibility = ["//visibility:public"])
 
+# C++ Slog target exposed to the end users who import slog into their projects.
+# Users will see Slog C++ files from `slog_cc/` directory appearing under
+# `slog_cc` third-party dir. E.g. `#include <slog_cc/slog.h>` and
+# `#include <slog_cc/context/context.h>`
 cc_library(
-    name = "slog",
+    name = "slog_cc",
     hdrs = [
         # TODO(vsbus): find a right way to add all hdrs here automatically
-        "//src/buffer:buffer.h",
-        "//src/buffer:buffer_data.h",
-        "//src/context:context.h",
-        "//src/context:notification_queue.h",
-        "//src/context:subscribers.h",
-        "//src/events:event.h",
-        "//src/events:scope.h",
-        "//src/primitives:call_site.h",
-        "//src/primitives:record.h",
-        "//src/primitives:tag.h",
-        "//src/primitives:timestamps.h",
-        "//src/printer:printer.h",
-        "//src/util:inline_macro.h",
-        "//src/util:string_util.h",
-        "//src:slog.h",
+        "//slog_cc/buffer:buffer.h",
+        "//slog_cc/buffer:buffer_data.h",
+        "//slog_cc/context:context.h",
+        "//slog_cc/events:event.h",
+        "//slog_cc/events:scope.h",
+        "//slog_cc/primitives:call_site.h",
+        "//slog_cc/primitives:record.h",
+        "//slog_cc/primitives:tag.h",
+        "//slog_cc/primitives:timestamps.h",
+        "//slog_cc/printer:printer.h",
+        "//slog_cc:slog.h",
     ],
     copts = [
         # max optimizations
         "-O3",
     ],
-    # We strip `src/` and add `slog/` prefix to make all files included like `#include <slog/slog.h>` in a target repo.
-    strip_include_prefix = "src",
-    include_prefix = "slog",
-    includes = ["src"],
-    # TODO(vsbus): find a way to make all files under deps invisible. For now users still can do `#include "external/src/slog.h" that is not cool.
+
+    # We want slog files to be included in a user pjects via
+    # `#include <slog_cc/foo/bar.h>`. To make it work with bazel we have to do
+    # a few things:
+    #   * add `includes` parameter: it will add `-isystem path/to/slog_cc` flag
+    #     to a compiler that will make all files under slog_cc/ dir will be
+    #     available to include with angle brackets,
+    #     e.g. `#include <slog_cc/slog.h>`.
+    #   * add `strip_include_prefix` to make files of C++ slog subdir exposed.
+    #   * add `include_prefix` to put all C++ slog include files behind slog_cc
+    #     prefix dir.
+    # Note: it sounds like using `strip_include_prefix` and `include_prefix`
+    # with same value doesn't make sense, but if we remove there params user
+    # project will not be able to see slog .h files for some reason.
+    include_prefix = "slog_cc",
+    includes = ["slog_cc"],
+    strip_include_prefix = "slog_cc",
     deps = [
-        "//src/buffer:buffer_cc",
-        "//src:slog_cc",
+        "//slog_cc",
+        "//slog_cc/buffer:buffer_cc",
     ],
 )
 
+# Python Slog target exposed to the end users who import slog into their projects.
+# Users will see Slog Python files from `slog_py` directory appearing under
+# `slog_py` third-party dir. E.g. `from slog_py import slog` and
+# `from slog_py.slog_pybind import SlogBuffer, SlogCallSite, SlogRecord`
+py_library(
+    name = "slog_py",
+    deps = ["//slog_py"],
+)
