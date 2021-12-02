@@ -1,16 +1,21 @@
-# slog
-Structured Logging
+# Slog
+Slog (reads "S-log") is a simple, fast, and cross-language structured logging. It's like Glog but allows structure via tags and async handling.
 
-# Requirements
-## Importing C++
+# Importing
+## Into a C++ project built by Bazel
+Requirements:
 * C++14
-## Importing Python
+
+Instructions: 
+* Follow the example from `test_import/example_project_cc` directory.
+
+## Into a Python project built by Bazel
+Requirements:
 * All C++ requirements from above
 * pybind11 and pybind11_bazel
 
-# Importing
-## Into a project built by Bazel
-See examples and instructions in `test_import` directory.
+Instructions: 
+* Follow the example from `test_import/example_project_py` directory.
 
 # Contributing
 ## Running tests
