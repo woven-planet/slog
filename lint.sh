@@ -10,7 +10,8 @@ set -e
 
 find $1 -name *.h > /tmp/files_to_lint_cc
 find $1 -name *.cc >> /tmp/files_to_lint_cc
-find $1 -name *.py >> /tmp/files_to_lint_py
+
+find $1 -name *.py > /tmp/files_to_lint_py
 
 if [[ ! -z "$2" ]] && [ "$2" == "-i" ]
 then

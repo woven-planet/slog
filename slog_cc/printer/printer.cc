@@ -165,7 +165,8 @@ std::string SlogPrinter::formatStderrLine(uint8_t severity, int month, int day,
 }
 
 void SlogPrinter::emitStderrLine(const SlogRecord& r, const SlogCallSite& cs) {
-  // TODO(vsbus): improve perf ot emitStderrLine(). It regressed 1.5x comparing to using GLOG directly.
+  // TODO(vsbus): improve perf ot emitStderrLine(). It regressed 1.5x comparing
+  // to using GLOG directly.
   const auto now = [&r] {
     switch (r.time().global_clock_type_id) {
       case SlogGlobalClockTypeId::kWallTimeClock:
@@ -194,7 +195,8 @@ void SlogPrinter::emitStderrLine(const SlogRecord& r, const SlogCallSite& cs) {
   const std::string file_name = util::split(cs.file(), '/').back();
   const int lineno = cs.line();
   const std::string msg = flatText(r);
-  // TODO(vsbus): make emitStderr thread-safe by adding locks around printing the line.
+  // TODO(vsbus): make emitStderr thread-safe by adding locks around printing
+  // the line.
   std::cerr << formatStderrLine(severity, month, day, hour, minute, second,
                                 thread_id, file_name, lineno, msg)
             << std::endl;
