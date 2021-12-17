@@ -18,8 +18,12 @@ Instructions:
 * Follow the example from `test_import/example_project_py` directory.
 
 # Contributing
+## Installing tools for build
+* `sudo apt-get install zstd`
+
+
 ## Running tests
-* `bazelisk test --test_output=errors slog/...` -- run all unit tests.
+* `bazelisk test --test_output=errors //...` -- run all unit tests.
 
 ## Code formatting
 * `./lint.sh ./ -i` -- automatically format all code.
