@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Usage:
-#   ./lint.sh <path> [-i]
+# Usage (from repo root dir):
+#   scripts/lint.sh <path> [-i]
 #   e.g.
-#     ./lint.sh ./
-#     ./lint.sh slog/primitives/ -i 
+#     scripts/lint.sh ./
+#     scripts/lint.sh slog/primitives/ -i 
 
 set -e
 

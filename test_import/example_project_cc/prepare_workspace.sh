@@ -1,1 +1,1 @@
-cat WORKSPACE.template | sed "s/<version>/$1/g" >WORKSPACE
+cat WORKSPACE.template | sed "s/<version>/v$1/g" >WORKSPACE

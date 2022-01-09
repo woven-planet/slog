@@ -39,7 +39,10 @@ py_library(
     name = "slog_py",
     srcs = ["slog.py"],
     data = [":slog_pybind.so"],
-    visibility = ["//:__pkg__"],
+    visibility = [
+        "//:__pkg__",
+        "//pkg_slog_py_wheel:__pkg__",
+    ],
 )
 
 py_test(

@@ -50,6 +50,7 @@ http_archive(
 http_archive(
     name = "pybind11",
     build_file = "@pybind11_bazel//:pybind11.BUILD",
+    sha256 = "97504db65640570f32d3fdf701c25a340c8643037c3b69aec469c10c93dc8504",
     strip_prefix = "pybind11-2.5.0",
     urls = ["https://github.com/pybind/pybind11/archive/v2.5.0.tar.gz"],
 )
@@ -62,3 +63,11 @@ python_configure(
 )
 
 ######## Import pybind11 end ########
+
+http_archive(
+    name = "python_wheel",
+    build_file = "//pkg_slog_py_wheel:python_wheel.BUILD",
+    sha256 = "9515fe0a94e823fd90b08d22de45d7bde57c90edce705b22f5e1ecf7e1b653c8",
+    strip_prefix = "wheel-0.30.0",
+    urls = ["https://files.pythonhosted.org/packages/fa/b4/f9886517624a4dcb81a1d766f68034344b7565db69f13d52697222daeb72/wheel-0.30.0.tar.gz"],
+)

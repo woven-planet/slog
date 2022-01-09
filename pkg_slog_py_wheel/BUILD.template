@@ -1,0 +1,9 @@
+load("//pkg_slog_py_wheel:pkg_py.bzl", "pkg_py")
+pkg_py(
+    # Note, target name will set the package name in the python package
+    # repository. You can install slog_py into your environment using pip, e.g.
+    # `pip3 install slog-py --extra-index-url https://artifactory.pdx.l5.woven-planet.tech/repository/pypi-internal-ephemeral/simple`
+    name = "slog_py",
+    libs = ["//slog_py"],
+    version = "<version>",
+)
