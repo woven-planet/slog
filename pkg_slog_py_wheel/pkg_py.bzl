@@ -214,8 +214,7 @@ rm -rf $TMP
 def _publish_pkg_py_executable_impl(ctx):
     publish_pkg_py_script = _PUBLISH_PYPI_SCRIPT.format(
         dist_tar_path = ctx.files.dist_tar[0].path,
-        # TODO(vsbus): add code to write to pypi-internal with right user/password
-        pkg_py_repo_args = "--repository-url=https://artifactory.pdx.l5.woven-planet.tech/repository/pypi-internal-ephemeral/ -u \"\" -p \"\"",
+        pkg_py_repo_args = "-r nexus",
     )
     ctx.actions.write(
         content = publish_pkg_py_script,

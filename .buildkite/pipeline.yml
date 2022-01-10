@@ -81,6 +81,7 @@ steps:
       - "sudo apt install twine -y"
       - "cd pkg_slog_py_wheel"
       - "./prepare_build.sh $(cat ../VERSION).${BUILDKITE_BUILD_NUMBER}"
+      - "./pypi_nexus_login.sh"
       - "cd .."
       - "bazelisk build //pkg_slog_py_wheel:slog_py"
     retry:
