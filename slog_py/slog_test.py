@@ -13,7 +13,7 @@ from slog_py.slog_pybind import SlogBuffer, SlogCallSite, SlogRecord
 
 class SlogPyTest(unittest.TestCase):
     def test_severities(self):
-        with SlogBuffer() as slog_buffer:
+        with SlogBuffer(slog.get_context()) as slog_buffer:
             slog.info('Hi INFO')
             slog.warning('Hi WARNING')
             slog.error('Hi ERROR')
@@ -27,7 +27,7 @@ class SlogPyTest(unittest.TestCase):
             self.assertEqual(2, int(json.loads(str(records[2]))['severity']))
 
     def test_silent_noisy(self):
-        with SlogBuffer() as slog_buffer:
+        with SlogBuffer(slog.get_context()) as slog_buffer:
             slog.info('some noise', tags={'is_noisy': 1})
             slog.info(tags={'is_noisy': 0})
 
@@ -47,7 +47,7 @@ class SlogPyTest(unittest.TestCase):
             self.assertEqual(0, int(record_1['tags'][0]['valueInt']))
 
     def test_call_site(self):
-        with SlogBuffer() as slog_buffer:
+        with SlogBuffer(slog.get_context()) as slog_buffer:
             slog.info(tags={'foo': 'bar'})
 
             slog_buffer.waitSlogQueue()
@@ -63,7 +63,7 @@ class SlogPyTest(unittest.TestCase):
             self.assertEqual('test_call_site', call_site.function())
 
     def test_scope(self):
-        with SlogBuffer() as slog_buffer:
+        with SlogBuffer(slog.get_context()) as slog_buffer:
             with slog.scope('foo_scope', tags={'foo': 'bar'}):
                 slog.info(tags={'foo': 1.5})
 
@@ -93,7 +93,7 @@ class SlogPyTest(unittest.TestCase):
             self.assertEqual(2, len(record_2['tags']))
 
     def test_scope_decorator(self):
-        with SlogBuffer() as slog_buffer:
+        with SlogBuffer(slog.get_context()) as slog_buffer:
             @slog.scope_decorator()
             def f(msg):
                 slog.info('msg: {}'.format(msg))
@@ -125,7 +125,7 @@ class SlogPyTest(unittest.TestCase):
             self.assertEqual(2, len(record_2['tags']))
 
     def test_scope_with_exception(self):
-        with SlogBuffer() as slog_buffer:
+        with SlogBuffer(slog.get_context()) as slog_buffer:
             try:
                 with slog.scope('fooz_scope'):
                     raise Exception('foo-error')

@@ -27,16 +27,16 @@ class SlogTest : public ::testing::Test {
     slog_records_.clear();
     slog_subscribers_.clear();
     slog_subscribers_.push_back(
-        SlogContext::getInstance().createAsyncSubscriber(
+        SlogContext::getInstance()->createAsyncSubscriber(
             [this](const SlogRecord& record) {
               std::unique_lock<std::mutex> lock(slog_records_mutex_);
               slog_records_.push_back(record);
             }));
-    SlogContext::getInstance().resetCallSites();
+    SlogContext::getInstance()->resetCallSites();
   }
 
   void TearDown() override {
-    SlogContext::getInstance().resetAsyncNotificationQueue();
+    SlogContext::getInstance()->resetAsyncNotificationQueue();
   }
 
   template <class T>
@@ -80,7 +80,7 @@ class SlogTest : public ::testing::Test {
     return {true, ""};
   }
 
-  void waitSlog() { SlogContext::getInstance().waitAsyncSubscribers(); }
+  void waitSlog() { SlogContext::getInstance()->waitAsyncSubscribers(); }
 
  protected:
   std::mutex slog_records_mutex_;
@@ -106,7 +106,7 @@ TEST_F(SlogTest, basic) {
     const int32_t call_site_id = 1;
     EXPECT_EQ(call_site_id, slog_records_.back().call_site_id());
     const SlogCallSite call_site =
-        SlogContext::getInstance().getCallSite(call_site_id);
+        SlogContext::getInstance()->getCallSite(call_site_id);
     EXPECT_EQ("slog_cc/slog_test.cc", call_site.file());
     EXPECT_EQ(__LINE__ - 12, call_site.line());
     EXPECT_EQ("TestBody", call_site.function());
@@ -122,7 +122,7 @@ TEST_F(SlogTest, basic) {
     const int32_t call_site_id = 2;
     EXPECT_EQ(call_site_id, slog_records_.back().call_site_id());
     const SlogCallSite call_site =
-        SlogContext::getInstance().getCallSite(call_site_id);
+        SlogContext::getInstance()->getCallSite(call_site_id);
     EXPECT_EQ("slog_cc/slog_test.cc", call_site.file());
     EXPECT_EQ(__LINE__ - 13, call_site.line());
     EXPECT_EQ("TestBody", call_site.function());
@@ -338,7 +338,7 @@ TEST_F(SlogTest, scope) {
     const int32_t call_site_id = 1;
     EXPECT_EQ(call_site_id, slog_records_[0].call_site_id());
     const SlogCallSite call_site =
-        SlogContext::getInstance().getCallSite(call_site_id);
+        SlogContext::getInstance()->getCallSite(call_site_id);
     EXPECT_EQ("slog_cc/slog_test.cc", call_site.file());
     EXPECT_EQ(scope_a_line, call_site.line());
     EXPECT_EQ("TestBody", call_site.function());
@@ -364,7 +364,7 @@ TEST_F(SlogTest, scope) {
     const int32_t call_site_id = 2;
     EXPECT_EQ(call_site_id, slog_records_[1].call_site_id());
     const SlogCallSite call_site =
-        SlogContext::getInstance().getCallSite(call_site_id);
+        SlogContext::getInstance()->getCallSite(call_site_id);
     EXPECT_EQ("slog_cc/slog_test.cc", call_site.file());
     EXPECT_EQ(scope_b_line, call_site.line());
     EXPECT_EQ("TestBody", call_site.function());
@@ -391,9 +391,9 @@ TEST_F(SlogTest, scope) {
   EXPECT_EQ(1, countTags(slog_records_[4].tags(), ".scope_close"));
   EXPECT_EQ("", SlogPrinter::slogText(slog_records_[4]));
   EXPECT_EQ(0, slog_records_[4].call_site_id());
-  EXPECT_EQ("", SlogContext::getInstance().getCallSite(0).file());
-  EXPECT_EQ(0, SlogContext::getInstance().getCallSite(0).line());
-  EXPECT_EQ("", SlogContext::getInstance().getCallSite(0).function());
+  EXPECT_EQ("", SlogContext::getInstance()->getCallSite(0).file());
+  EXPECT_EQ(0, SlogContext::getInstance()->getCallSite(0).line());
+  EXPECT_EQ("", SlogContext::getInstance()->getCallSite(0).function());
 
   EXPECT_EQ(
       SlogPrinter::debugString(
@@ -405,9 +405,9 @@ TEST_F(SlogTest, scope) {
   EXPECT_EQ("", SlogPrinter::slogText(slog_records_[5]));
   EXPECT_EQ("", SlogPrinter::slogText(slog_records_[5]));
   EXPECT_EQ(0, slog_records_[5].call_site_id());
-  EXPECT_EQ("", SlogContext::getInstance().getCallSite(0).file());
-  EXPECT_EQ(0, SlogContext::getInstance().getCallSite(0).line());
-  EXPECT_EQ("", SlogContext::getInstance().getCallSite(0).function());
+  EXPECT_EQ("", SlogContext::getInstance()->getCallSite(0).file());
+  EXPECT_EQ(0, SlogContext::getInstance()->getCallSite(0).line());
+  EXPECT_EQ("", SlogContext::getInstance()->getCallSite(0).function());
 
   ASSERT_ASCENDING(true, slog_records_);
 }
@@ -502,7 +502,7 @@ TEST_F(SlogTest, fast_callback) {
   // fail with TIMEOUT if we have a bug.
   int cnt = 0;
   auto slow_callback_subscriber =
-      SlogContext::getInstance().createAsyncSubscriber(
+      SlogContext::getInstance()->createAsyncSubscriber(
           [&cnt](const SlogRecord&) { cnt += 1; });
   for (int i = 0; i < 1000 * 1000; ++i) {
     SLOG(INFO).addTag("test-fast-callback");
@@ -516,7 +516,7 @@ TEST_F(SlogTest, slow_callback) {
   // callback (1 second per message). If subscriber is not handled correctly
   // this test will take very long time and will fail with TIMOUT.
   auto slow_callback_subscriber =
-      SlogContext::getInstance().createAsyncSubscriber(
+      SlogContext::getInstance()->createAsyncSubscriber(
           [](const SlogRecord&) { usleep(1000 * 1000); });
   for (int i = 0; i < 1000 * 1000; ++i) {
     SLOG(INFO).addTag("test-slow-callback");

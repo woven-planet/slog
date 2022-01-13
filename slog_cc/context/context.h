@@ -16,7 +16,7 @@ namespace slog {
 
 class SlogContext {
  public:
-  static SlogContext& getInstance();
+  static std::shared_ptr<SlogContext> getInstance();
 
   SlogSubscriber createAsyncSubscriber(const SlogCallback& callback) {
     return async_subscribers_.create(callback);

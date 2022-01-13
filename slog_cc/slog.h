@@ -4,12 +4,12 @@
 #include "slog_cc/events/event.h"
 #include "slog_cc/events/scope.h"
 
-#define SLOG(severity)                                               \
-  slog::SlogEvent(slog::severity, [func = __FUNCTION__] {            \
-    static int32_t slog_call_site_id =                               \
-        slog::SlogContext::getInstance().addCallSite(func, __FILE__, \
-                                                     __LINE__);      \
-    return slog_call_site_id;                                        \
+#define SLOG(severity)                                                \
+  slog::SlogEvent(slog::severity, [func = __FUNCTION__] {             \
+    static int32_t slog_call_site_id =                                \
+        slog::SlogContext::getInstance()->addCallSite(func, __FILE__, \
+                                                      __LINE__);      \
+    return slog_call_site_id;                                         \
   }())
 
 // C++ standard 12.2.3 guarantees that the SlogEvent is not destroyed before

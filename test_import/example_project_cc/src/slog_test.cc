@@ -4,9 +4,9 @@
 
 TEST(SlogTest, basic) {
   SLOG(INFO) << "foo";
-  slog::SlogContext::getInstance().waitAsyncSubscribers();
+  slog::SlogContext::getInstance()->waitAsyncSubscribers();
   {
-    slog::SlogBuffer slog_buffer;
+    slog::SlogBuffer slog_buffer(slog::SlogContext::getInstance());
     {
       auto buffer_data = slog_buffer.flush();
       EXPECT_EQ(0, buffer_data.records.size());
@@ -14,7 +14,7 @@ TEST(SlogTest, basic) {
     }
 
     SLOG(INFO) << "bar";
-    slog::SlogContext::getInstance().waitAsyncSubscribers();
+    slog::SlogContext::getInstance()->waitAsyncSubscribers();
     {
       auto buffer_data = slog_buffer.flush();
       EXPECT_EQ(1, buffer_data.records.size());

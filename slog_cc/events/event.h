@@ -28,8 +28,8 @@ class SlogEvent {
             call_site_id, severity) {}
 
   SLOG_INLINE ~SlogEvent() {
-    record_.set_time(SlogContext::getInstance().getTimestamps());
-    SlogContext::getInstance().notifySubscribers(std::move(this->record_));
+    record_.set_time(SlogContext::getInstance()->getTimestamps());
+    SlogContext::getInstance()->notifySubscribers(std::move(this->record_));
   }
 
   SLOG_INLINE const SlogRecord& record() const { return record_; }

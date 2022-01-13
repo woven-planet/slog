@@ -45,7 +45,7 @@ class SlogBenchmark : public benchmark::Fixture {
   void SetUp(const ::benchmark::State& state) {}
 
   void TearDown(const ::benchmark::State& state) {
-    SlogContext::getInstance().resetAsyncNotificationQueue();
+    SlogContext::getInstance()->resetAsyncNotificationQueue();
   }
 };
 
@@ -311,7 +311,7 @@ BENCHMARK_F(SlogBenchmark, glog_dummy_str)(benchmark::State& state) {
 }
 
 BENCHMARK_F(SlogBenchmark, slow_callback)(benchmark::State& state) {
-  auto sbs3 = SlogContext::getInstance().createAsyncSubscriber(
+  auto sbs3 = SlogContext::getInstance()->createAsyncSubscriber(
       [](const SlogRecord&) { usleep(100 * 1000); });
   int count = 0;
   for (auto _ : state) {

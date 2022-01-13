@@ -19,7 +19,7 @@ PYBIND11_MODULE(slog_pybind, m) {
       .def_readwrite("call_sites", &slog::SlogBufferData::call_sites);
 
   pybind11::class_<slog::SlogBuffer>(m, "SlogBuffer")
-      .def(pybind11::init<>())
+      .def(pybind11::init<std::shared_ptr<slog::SlogContext>>())
       .def("flush", &slog::SlogBuffer::flush)
       .def("waitSlogQueue", &slog::SlogBuffer::waitSlogQueue)
       .def("__enter__",
@@ -36,9 +36,14 @@ PYBIND11_MODULE(slog_pybind, m) {
   m.def(
       "add_or_reuse_call_site_very_slow",
       [](const std::string& function, const std::string& file, const int line) {
-        return slog::SlogContext::getInstance().addOrReuseCallSiteVerySlow(
+        return slog::SlogContext::getInstance()->addOrReuseCallSiteVerySlow(
             function, file, line);
       });
+
+  // Binding this class to be able to return a ptr to it from get_context()
+  pybind11::class_<slog::SlogContext, std::shared_ptr<slog::SlogContext>>(
+      m, "SlogContext");
+  m.def("get_context", &slog::SlogContext::getInstance);
 
   pybind11::class_<slog::SlogEvent>(m, "SlogEvent")
       .def(pybind11::init<const int8_t, const int32_t>())

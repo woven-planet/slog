@@ -92,7 +92,7 @@ steps:
 
   - wait
 
-  - label: ":rocket: System Test: Import slog_cc"
+  - label: ":rocket: System Test: Import slog_cc via bazel"
     timeout: 5
     agents:
       queue: cpu-small
@@ -108,7 +108,7 @@ steps:
       <<: *vault
       <<: *docker
 
-  - label: ":rocket: System Test: Import slog_py"
+  - label: ":rocket: System Test: Import slog_py via bazel"
     timeout: 5
     agents:
       queue: cpu-small

@@ -7,7 +7,7 @@ from slog_py.slog_pybind import SlogBuffer, SlogCallSite, SlogRecord
 
 class SlogPyTest(unittest.TestCase):
     def test_severities(self):
-        with SlogBuffer() as slog_buffer:
+        with SlogBuffer(slog.get_context()) as slog_buffer:
             slog.info('Hello World')
             slog_buffer.waitSlogQueue()
             records = slog_buffer.flush().records

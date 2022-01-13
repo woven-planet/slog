@@ -49,3 +49,7 @@ def scope_decorator(tags=None):
                 return func(*args, **kwargs)
         return impl
     return decorator
+
+
+def get_context():
+    return slog_pybind.get_context()

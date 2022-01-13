@@ -2,9 +2,9 @@
 
 namespace slog {
 
-SlogContext& SlogContext::getInstance() {
-  static SlogContext* context = new SlogContext();
-  return *context;
+std::shared_ptr<SlogContext> SlogContext::getInstance() {
+  static auto& context = *new std::shared_ptr<SlogContext>(new SlogContext());
+  return context;
 }
 
 SlogContext::SlogContext() : get_timestamps_func_(kDefaultGetTimestampsFunc) {
@@ -31,7 +31,7 @@ const std::function<SlogTimestamps()> SlogContext::kDefaultGetTimestampsFunc =
       // CLOCK_MONOTONIC_COARSE ~2ns with 1 ms precision.
       // Consider overloading with proper implementation to match your
       // performance and precision expectations. Overloading could be done in a
-      // following way: SlogContext::getInstance().setGetTimestampsFunc([] {
+      // following way: SlogContext::getInstance()->setGetTimestampsFunc([] {
       //   const int64_t elapsed_ns = myElapsedNs();
       //   const int64_t global_ns = myGloabalNs();
       //   SlogTimestamps{elapsed_ns, global_ns,

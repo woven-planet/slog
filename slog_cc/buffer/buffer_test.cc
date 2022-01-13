@@ -16,21 +16,19 @@ class SlogBufferTest : public ::testing::Test {
     slog_records_.clear();
     slog_subscribers_.clear();
     slog_subscribers_.push_back(
-        SlogContext::getInstance().createAsyncSubscriber(
-            [this](const SlogRecord& record) {
-              std::unique_lock<std::mutex> lock(slog_records_mutex_);
-              slog_records_.push_back(record);
-            }));
-    SlogContext::getInstance().resetCallSites();
+        slog_context_->createAsyncSubscriber([this](const SlogRecord& record) {
+          std::unique_lock<std::mutex> lock(slog_records_mutex_);
+          slog_records_.push_back(record);
+        }));
+    slog_context_->resetCallSites();
   }
 
-  void TearDown() override {
-    SlogContext::getInstance().resetAsyncNotificationQueue();
-  }
+  void TearDown() override { slog_context_->resetAsyncNotificationQueue(); }
 
-  void waitSlog() { SlogContext::getInstance().waitAsyncSubscribers(); }
+  void waitSlog() { slog_context_->waitAsyncSubscribers(); }
 
  protected:
+  std::shared_ptr<SlogContext> slog_context_ = SlogContext::getInstance();
   std::mutex slog_records_mutex_;
   std::vector<SlogRecord> slog_records_;
   std::vector<SlogSubscriber> slog_subscribers_;
@@ -41,7 +39,7 @@ TEST_F(SlogBufferTest, slog_buffer) {
   waitSlog();
   ASSERT_EQ(1, slog_records_.size());
   {
-    SlogBuffer slog_buffer;
+    SlogBuffer slog_buffer(slog_context_);
     {
       auto buffer_data = slog_buffer.flush();
       EXPECT_EQ(0, buffer_data.records.size());
@@ -68,8 +66,8 @@ TEST_F(SlogBufferTest, slog_buffer) {
 TEST_F(SlogBufferTest, races) {
   std::vector<std::future<void>> tasks;
   for (int i = 0; i < 1000; ++i) {
-    tasks.push_back(std::async(std::launch::async, [] {
-      SlogBuffer b;
+    tasks.push_back(std::async(std::launch::async, [this] {
+      SlogBuffer b(slog_context_);
       for (int j = 0; j < 10; ++j) {
         SLOG_SCOPE("foo");
         usleep(rand() % 4 * 1000);

@@ -67,7 +67,7 @@ class SlogLoad : public benchmark::Fixture {
   void SetUp(const ::benchmark::State& state) {}
 
   void TearDown(const ::benchmark::State& state) {
-    SlogContext::getInstance().resetAsyncNotificationQueue();
+    SlogContext::getInstance()->resetAsyncNotificationQueue();
   }
 };
 

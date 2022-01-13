@@ -8,6 +8,7 @@
 
 namespace slog {
 
+class SlogContext;
 class SlogRecord;
 
 // SlogBuffer instance subscribes on Slog events stream and copies them to
@@ -17,7 +18,7 @@ class SlogRecord;
 class SlogBuffer {
  public:
   // Create buffer and subscribes to Slog events stream.
-  SlogBuffer();
+  SlogBuffer(std::shared_ptr<SlogContext> slog_context);
 
   // Returns a list of all accumulated slog events.
   SlogBufferData flush();
@@ -31,6 +32,7 @@ class SlogBuffer {
 
  private:
   mutable std::mutex mutex_;
+  std::shared_ptr<SlogContext> slog_context_;
   std::vector<SlogRecord> buffer_;
   SlogSubscriber slog_subscriber_;
 };
