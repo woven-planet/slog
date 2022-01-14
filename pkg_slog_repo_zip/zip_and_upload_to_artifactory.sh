@@ -1,3 +1,5 @@
+#!/bin/bash
+
 zip -r "/tmp/slog-v$1.zip" "./" -x ".*"
 
 PACKAGE_PATH=tmp/slog

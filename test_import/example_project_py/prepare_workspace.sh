@@ -1,3 +1,5 @@
+#!/bin/bash
+
 PACKAGE_PATH=tmp\\/slog
 if [[ "${BUILDKITE_BRANCH}" = "main" ]]; then
     PACKAGE_PATH=slog
