@@ -13,12 +13,12 @@ from slog_py.slog_pybind import SlogBuffer, SlogCallSite, SlogRecord
 
 class SlogPyTest(unittest.TestCase):
     def test_severities(self):
-        with SlogBuffer(slog.get_context()) as slog_buffer:
+        with SlogBuffer(slog.SlogContext.get_instance()) as slog_buffer:
             slog.info('Hi INFO')
             slog.warning('Hi WARNING')
             slog.error('Hi ERROR')
 
-            slog_buffer.waitSlogQueue()
+            slog_buffer.wait_slog_queue()
             records = slog_buffer.flush().records
 
             self.assertEqual(3, len(records))
@@ -27,11 +27,11 @@ class SlogPyTest(unittest.TestCase):
             self.assertEqual(2, int(json.loads(str(records[2]))['severity']))
 
     def test_silent_noisy(self):
-        with SlogBuffer(slog.get_context()) as slog_buffer:
+        with SlogBuffer(slog.SlogContext.get_instance()) as slog_buffer:
             slog.info('some noise', tags={'is_noisy': 1})
             slog.info(tags={'is_noisy': 0})
 
-            slog_buffer.waitSlogQueue()
+            slog_buffer.wait_slog_queue()
             records = slog_buffer.flush().records
 
             self.assertEqual(2, len(records))
@@ -47,10 +47,10 @@ class SlogPyTest(unittest.TestCase):
             self.assertEqual(0, int(record_1['tags'][0]['valueInt']))
 
     def test_call_site(self):
-        with SlogBuffer(slog.get_context()) as slog_buffer:
+        with SlogBuffer(slog.SlogContext.get_instance()) as slog_buffer:
             slog.info(tags={'foo': 'bar'})
 
-            slog_buffer.waitSlogQueue()
+            slog_buffer.wait_slog_queue()
             buffer_data = slog_buffer.flush()
             records = buffer_data.records
             call_sites = buffer_data.call_sites
@@ -63,11 +63,11 @@ class SlogPyTest(unittest.TestCase):
             self.assertEqual('test_call_site', call_site.function())
 
     def test_scope(self):
-        with SlogBuffer(slog.get_context()) as slog_buffer:
+        with SlogBuffer(slog.SlogContext.get_instance()) as slog_buffer:
             with slog.scope('foo_scope', tags={'foo': 'bar'}):
                 slog.info(tags={'foo': 1.5})
 
-            slog_buffer.waitSlogQueue()
+            slog_buffer.wait_slog_queue()
             buffer_data = slog_buffer.flush()
             records = buffer_data.records
             call_sites = buffer_data.call_sites
@@ -93,13 +93,13 @@ class SlogPyTest(unittest.TestCase):
             self.assertEqual(2, len(record_2['tags']))
 
     def test_scope_decorator(self):
-        with SlogBuffer(slog.get_context()) as slog_buffer:
+        with SlogBuffer(slog.SlogContext.get_instance()) as slog_buffer:
             @slog.scope_decorator()
             def f(msg):
                 slog.info('msg: {}'.format(msg))
             f('msg1')
 
-            slog_buffer.waitSlogQueue()
+            slog_buffer.wait_slog_queue()
             buffer_data = slog_buffer.flush()
             records = buffer_data.records
             call_sites = buffer_data.call_sites
@@ -125,7 +125,7 @@ class SlogPyTest(unittest.TestCase):
             self.assertEqual(2, len(record_2['tags']))
 
     def test_scope_with_exception(self):
-        with SlogBuffer(slog.get_context()) as slog_buffer:
+        with SlogBuffer(slog.SlogContext.get_instance()) as slog_buffer:
             try:
                 with slog.scope('fooz_scope'):
                     raise Exception('foo-error')
@@ -134,7 +134,7 @@ class SlogPyTest(unittest.TestCase):
                 print('Exception could be handled here: {}'.format(e))
                 pass
 
-            slog_buffer.waitSlogQueue()
+            slog_buffer.wait_slog_queue()
             buffer_data = slog_buffer.flush()
             records = buffer_data.records
             call_sites = buffer_data.call_sites

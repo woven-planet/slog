@@ -59,7 +59,6 @@ steps:
     timeout: 5
     agents:
       queue: cpu-small
-    branches: main
     commands:
       - "sudo apt update"
       - "sudo apt install zip -y"
@@ -74,7 +73,6 @@ steps:
     timeout: 5
     agents:
       queue: cpu-small
-    branches: main
     commands:
       - "scripts/setup_dev_env.sh"
       - "sudo apt update"
@@ -96,7 +94,6 @@ steps:
     timeout: 5
     agents:
       queue: cpu-small
-    branches: main
     commands:
       - "scripts/setup_dev_env.sh"
       - "cd test_import/example_project_cc/"
@@ -112,7 +109,6 @@ steps:
     timeout: 5
     agents:
       queue: cpu-small
-    branches: main
     commands:
       - "scripts/setup_dev_env.sh"
       - "cd test_import/example_project_py/"
@@ -128,7 +124,6 @@ steps:
     timeout: 5
     agents:
       queue: cpu-small
-    branches: main
     commands:
       - "cd test_import/example_project_py_via_pip/"
       - "scripts/setup_env.sh $(cat ../../VERSION).${BUILDKITE_BUILD_NUMBER}"

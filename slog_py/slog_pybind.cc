@@ -21,17 +21,17 @@ PYBIND11_MODULE(slog_pybind, m) {
   pybind11::class_<slog::SlogBuffer>(m, "SlogBuffer")
       .def(pybind11::init<std::shared_ptr<slog::SlogContext>>())
       .def("flush", &slog::SlogBuffer::flush)
-      .def("waitSlogQueue", &slog::SlogBuffer::waitSlogQueue)
+      .def("wait_slog_queue", &slog::SlogBuffer::waitSlogQueue)
       .def("__enter__",
            [](slog::SlogBuffer* slog_buffer) { return slog_buffer; })
       .def("__exit__", [](slog::SlogBuffer&, pybind11::object, pybind11::object,
                           pybind11::object) {});
   ;
 
-  m.attr("SeverityInfo") = slog::INFO;
-  m.attr("SeverityWarning") = slog::WARNING;
-  m.attr("SeverityError") = slog::ERROR;
-  m.attr("SeverityFatal") = slog::FATAL;
+  m.attr("SEVERITY_INFO") = slog::INFO;
+  m.attr("SEVERITY_WARNING") = slog::WARNING;
+  m.attr("SEVERITY_ERROR") = slog::ERROR;
+  m.attr("SEVERITY_FATAL") = slog::FATAL;
 
   m.def(
       "add_or_reuse_call_site_very_slow",
@@ -40,24 +40,24 @@ PYBIND11_MODULE(slog_pybind, m) {
             function, file, line);
       });
 
-  // Binding this class to be able to return a ptr to it from get_context()
   pybind11::class_<slog::SlogContext, std::shared_ptr<slog::SlogContext>>(
-      m, "SlogContext");
-  m.def("get_context", &slog::SlogContext::getInstance);
+      m, "SlogContext")
+      .def_static("get_instance", &slog::SlogContext::getInstance);
 
   pybind11::class_<slog::SlogEvent>(m, "SlogEvent")
       .def(pybind11::init<const int8_t, const int32_t>())
-      .def("addTag", [](slog::SlogEvent& event, const std::string& key,
-                        int64_t value) { event.addTag(key, value); })
-      .def("addTag", [](slog::SlogEvent& event, const std::string& key,
-                        double value) { event.addTag(key, value); })
-      .def("addTag", [](slog::SlogEvent& event, const std::string& key,
-                        const std::string& value) { event.addTag(key, value); })
-      .def("emitValue", [](slog::SlogEvent& event, const std::string& value) {
+      .def("add_tag", [](slog::SlogEvent& event, const std::string& key,
+                         int64_t value) { event.addTag(key, value); })
+      .def("add_tag", [](slog::SlogEvent& event, const std::string& key,
+                         double value) { event.addTag(key, value); })
+      .def("add_tag",
+           [](slog::SlogEvent& event, const std::string& key,
+              const std::string& value) { event.addTag(key, value); })
+      .def("emit_value", [](slog::SlogEvent& event, const std::string& value) {
         event << value;
       });
 
-  m.attr("kSlogTagKeyScopeName") = slog::kSlogTagKeyScopeName;
+  m.attr("SLOG_TAG_KEY_SCOPE_NAME") = slog::kSlogTagKeyScopeName;
 
   pybind11::class_<slog::SlogScope>(m, "SlogScope")
       .def(pybind11::init<slog::SlogEvent&>())
