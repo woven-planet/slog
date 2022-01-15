@@ -23,7 +23,18 @@ http_archive(
 
 http_archive(
     name = "com_github_google_benchmark",
-    # build_file = "//third_party:benchmark.BUILD",
+    build_file_content =
+        """
+cc_library(
+    name = "benchmark",
+    srcs = glob(["src/*.h", "src/*.cc"]),
+    hdrs = glob(["include/benchmark/benchmark.h"]),
+    copts = ["-O3", "-DNDEBUG", "-fPIC"],
+    includes = ["include"],
+    linkstatic = 1,
+    visibility = ["//visibility:public"],
+)
+""",
     sha256 = "21e6e096c9a9a88076b46bd38c33660f565fa050ca427125f64c4a8bf60f336b",
     strip_prefix = "benchmark-1.5.2",
     urls = ["https://github.com/google/benchmark/archive/v1.5.2.zip"],
