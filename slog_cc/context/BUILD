@@ -15,6 +15,11 @@ cc_library(
         "notification_queue.h",
         "subscribers.h",
     ],
+    copts = [
+        "-DNDEBUG",
+        "-g0",
+        "-O3",
+    ],
     deps = [
         "//slog_cc/primitives:primitives_cc",
         "//slog_cc/printer",

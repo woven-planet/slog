@@ -8,6 +8,11 @@ cc_library(
     hdrs = [
         "slog.h",
     ],
+    copts = [
+        "-DNDEBUG",
+        "-g0",
+        "-O3",
+    ],
     deps = [
         "//slog_cc/context",
         "//slog_cc/events:events_cc",

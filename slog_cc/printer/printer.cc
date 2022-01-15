@@ -11,6 +11,7 @@
 
 #include "slog_cc/primitives/call_site.h"
 #include "slog_cc/primitives/record.h"
+#include "slog_cc/util/assert_macro.h"
 #include "slog_cc/util/string_util.h"
 
 namespace slog {
@@ -178,7 +179,7 @@ void SlogPrinter::emitStderrLine(const SlogRecord& r, const SlogCallSite& cs) {
         // one more time here.
         return std::chrono::system_clock::now();
     }
-    assert(0 && "This line is supposed to be unreachable code.");
+    SLOG_ASSERT(0 && "This line is supposed to be unreachable code.");
   }();
   const std::time_t now_t = std::chrono::system_clock::to_time_t(now);
   tm now_tm;
@@ -278,7 +279,7 @@ std::vector<TableField> kTableSchema = {
 };
 
 std::string renderLine(const Line& line) {
-  assert(line.size() == kTableSchema.size());
+  SLOG_ASSERT(line.size() == kTableSchema.size());
   std::vector<std::string> rendered_line;
   for (size_t i = 0; i < line.size(); ++i) {
     rendered_line.emplace_back(

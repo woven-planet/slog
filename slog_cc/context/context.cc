@@ -41,10 +41,10 @@ const std::function<SlogTimestamps()> SlogContext::kDefaultGetTimestampsFunc =
       // providing average precisions with average cost.
       thread_local struct timespec ts;
 
-      assert(-1 != clock_gettime(CLOCK_MONOTONIC, &ts));
+      SLOG_ASSERT(-1 != clock_gettime(CLOCK_MONOTONIC, &ts));
       const int64_t elapsed_ns = ts.tv_sec * 1000000000 + ts.tv_nsec;
 
-      assert(-1 != clock_gettime(CLOCK_REALTIME, &ts));
+      SLOG_ASSERT(-1 != clock_gettime(CLOCK_REALTIME, &ts));
       const int64_t global_ns = ts.tv_sec * 1000000000 + ts.tv_nsec;
 
       return SlogTimestamps{elapsed_ns, global_ns,

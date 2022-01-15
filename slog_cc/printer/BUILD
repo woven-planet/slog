@@ -11,6 +11,11 @@ cc_library(
     hdrs = [
         "printer.h",
     ],
+    copts = [
+        "-DNDEBUG",
+        "-g0",
+        "-O3",
+    ],
     deps = [
         "//slog_cc/primitives:primitives_cc",
         "//slog_cc/util:string_util",

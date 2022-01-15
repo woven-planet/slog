@@ -11,6 +11,7 @@
 #include "slog_cc/primitives/call_site.h"
 #include "slog_cc/primitives/record.h"
 #include "slog_cc/printer/printer.h"
+#include "slog_cc/util/assert_macro.h"
 
 namespace slog {
 
@@ -30,14 +31,14 @@ class SlogContext {
     sync_subscribers_.notify(record);
     std::shared_lock<std::shared_timed_mutex> lock(
         async_notification_queue_mutex_);
-    assert(async_notification_queue_.get());
+    SLOG_ASSERT(async_notification_queue_.get());
     async_notification_queue_.get()->add(std::move(record));
   }
 
   SLOG_INLINE void waitAsyncSubscribers() {
     std::shared_lock<std::shared_timed_mutex> lock(
         async_notification_queue_mutex_);
-    assert(async_notification_queue_.get());
+    SLOG_ASSERT(async_notification_queue_.get());
     async_notification_queue_.get()->waitRecordsFlush();
   }
 
@@ -60,7 +61,7 @@ class SlogContext {
   // invalidate result reference.
   SLOG_INLINE const SlogCallSite& getCallSite(size_t call_site_id) {
     std::shared_lock<std::shared_timed_mutex> lock(call_sites_mutex_);
-    assert(call_site_id < call_sites_.size());
+    SLOG_ASSERT(call_site_id < call_sites_.size());
     return *call_sites_.at(call_site_id);
   }
 
@@ -101,8 +102,8 @@ class SlogContext {
   // all public methods must be thread safe.
   SLOG_INLINE int addCallSiteUnsafe(const std::string& function,
                                     const std::string& file, int32_t line) {
-    assert(call_sites_.size() > 0U &&
-           "call_sites_ isn't initialized with resetCallSites() call.");
+    SLOG_ASSERT(call_sites_.size() > 0U &&
+                "call_sites_ isn't initialized with resetCallSites() call.");
     call_sites_.emplace_back(
         std::make_unique<SlogCallSite>(function, file, line));
     return call_sites_.size() - 1;

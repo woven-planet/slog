@@ -11,6 +11,11 @@ cc_library(
         "event.h",
         "scope.h",
     ],
+    copts = [
+        "-DNDEBUG",
+        "-g0",
+        "-O3",
+    ],
     deps = [
         "//slog_cc/context",
         "//slog_cc/primitives:primitives_cc",

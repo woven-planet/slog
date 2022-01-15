@@ -47,7 +47,7 @@ class SlogTest : public ::testing::Test {
       }
     }
     std::cerr << "Tag with given key=" << key << " not found." << std::endl;
-    assert(0);
+    SLOG_ASSERT(0);
     return SlogTag("", "");
   }
 

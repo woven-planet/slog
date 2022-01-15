@@ -13,6 +13,11 @@ cc_library(
         "buffer.h",
         "buffer_data.h",
     ],
+    copts = [
+        "-DNDEBUG",
+        "-g0",
+        "-O3",
+    ],
     deps = [
         "//slog_cc/context",
         "//slog_cc/events:events_cc",

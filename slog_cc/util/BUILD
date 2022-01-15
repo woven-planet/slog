@@ -3,6 +3,7 @@ package(default_visibility = ["//slog_cc:__subpackages__"])
 cc_library(
     name = "util",
     hdrs = [
+        "assert_macro.h",
         "inline_macro.h",
     ],
 )

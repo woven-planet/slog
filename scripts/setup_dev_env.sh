@@ -1,3 +1,7 @@
+# Install tcmalloc b/c we use `-ltcmalloc` linking option in some targets.
+sudo apt-get update -y
+sudo apt-get install -y google-perftools libgoogle-perftools-dev
+
 # Install bazelisk that will install bazel
 wget https://github.com/bazelbuild/bazelisk/releases/download/v1.11.0/bazelisk-linux-amd64
 chmod +x bazelisk-linux-amd64

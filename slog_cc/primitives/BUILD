@@ -15,6 +15,11 @@ cc_library(
         "tag.h",
         "timestamps.h",
     ],
+    copts = [
+        "-DNDEBUG",
+        "-g0",
+        "-O3",
+    ],
     deps = [
         "//slog_cc/util",
     ],
