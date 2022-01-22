@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_context_context
+#define slog_cc_context_context
 
 #include <cassert>
 #include <functional>
@@ -129,3 +130,5 @@ class SlogContext {
 };
 
 }  // namespace slog
+
+#endif

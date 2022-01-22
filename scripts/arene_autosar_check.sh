@@ -4,19 +4,7 @@ set -e
 
 /bin/bash -c "$(curl -fsSL https://arene-lab-artifact-repo-staging.s3-ap-northeast-1.amazonaws.com/installers/install.sh)"
 
-echo DEBUG HOME: $HOME
-echo DEBUG PWD: $PWD
-
-echo DEBUG ls -l $PWD/
-ls -l $PWD/
-
-echo DEBUG ls -l $HOME/.arene/bin/arene
-ls -l $HOME/.arene/bin/arene
-
 $HOME/.arene/bin/arene install arene_resource_provider_codeql_any_x86_64_unknown_linux_gnu
-
-echo DEBUG ls -l $PWD/.arene/plugins/arene_resource_provider_codeql_any_x86_64_unknown_linux_gnu/1.26.0/x86_64-unknown-linux-gnu/resources/
-ls -l $PWD/.arene/plugins/arene_resource_provider_codeql_any_x86_64_unknown_linux_gnu/1.26.0/x86_64-unknown-linux-gnu/resources/
 
 rm -rf build/codeql-database && \
 mkdir -p build && \
@@ -24,7 +12,7 @@ mkdir -p build && \
 /workdir/.arene/plugins/arene_resource_provider_codeql_any_x86_64_unknown_linux_gnu/1.26.0/x86_64-unknown-linux-gnu/resources/bin/codeql database analyze build/codeql-database autosar-default.qls \
     --format=csv \
     --output=build/codeql-analysis.csv \
-    --threads=12
+    --threads=36
 
 # #  --mount type=bind,source=$PWD,destination=/code/slog \
 # #  --mount type=bind,source=$PWD/.arene/plugins/arene_resource_provider_codeql_any_x86_64_unknown_linux_gnu/1.26.0/x86_64-unknown-linux-gnu/resources,destination=/opt/codeql \

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_primitives_tag
+#define slog_cc_primitives_tag
 
 #include <string>
 #include <utility>
@@ -95,8 +96,8 @@ class SlogTag {
   SLOG_INLINE SlogTagValueType valueType() const { return value_type_; }
 
  private:
-  SLOG_INLINE uint64_t pack(int64_t value) { return value; }
-  SLOG_INLINE uint64_t pack(double value) {
+  static SLOG_INLINE uint64_t pack(int64_t value) { return value; }
+  static SLOG_INLINE uint64_t pack(double value) {
     const uint64_t* ptr = reinterpret_cast<uint64_t*>(&value);
     return *ptr;
   }
@@ -111,3 +112,5 @@ class SlogTag {
 };
 
 }  // namespace slog
+
+#endif

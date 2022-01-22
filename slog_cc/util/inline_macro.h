@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_util_inline_macro
+#define slog_cc_util_inline_macro
 
 namespace slog {
 
@@ -7,3 +8,5 @@ namespace slog {
 #define SLOG_INLINE inline __attribute__((always_inline))
 
 }  // namespace slog
+
+#endif

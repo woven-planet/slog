@@ -6,9 +6,9 @@ package(default_visibility = [
 cc_library(
     name = "context",
     srcs = [
-        "context.cc",
-        "notification_queue.cc",
-        "subscribers.cc",
+        "context.cpp",
+        "notification_queue.cpp",
+        "subscribers.cpp",
     ],
     hdrs = [
         "context.h",

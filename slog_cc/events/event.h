@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_events_event
+#define slog_cc_events_event
 
 #include <sys/syscall.h>
 #include <unistd.h>
@@ -78,3 +79,5 @@ class SlogEvent {
 };
 
 }  // namespace slog
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_util_assert_macro
+#define slog_cc_util_assert_macro
 
 #include <iostream>
 
@@ -12,3 +13,5 @@ namespace slog {
   }
 
 }  // namespace slog
+
+#endif

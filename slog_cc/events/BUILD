@@ -6,7 +6,7 @@ package(default_visibility = [
 
 cc_library(
     name = "events_cc",
-    srcs = ["scope.cc"],
+    srcs = ["scope.cpp"],
     hdrs = [
         "event.h",
         "scope.h",

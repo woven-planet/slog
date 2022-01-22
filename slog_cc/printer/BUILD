@@ -6,7 +6,7 @@ package(default_visibility = [
 cc_library(
     name = "printer",
     srcs = [
-        "printer.cc",
+        "printer.cpp",
     ],
     hdrs = [
         "printer.h",
@@ -24,7 +24,7 @@ cc_library(
 
 cc_test(
     name = "printer_test",
-    srcs = ["printer_test.cc"],
+    srcs = ["printer_test.cpp"],
     deps = [
         ":printer",
         "@com_github_google_googletest//:gtest_main",

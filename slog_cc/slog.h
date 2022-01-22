@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_slog
+#define slog_cc_slog
 
 #include "slog_cc/context/context.h"
 #include "slog_cc/events/event.h"
@@ -20,3 +21,5 @@
 
 #define SLOG_FUNC_BLOCK_START(func_block_name) \
   SLOG(INFO).addTag(slog::kSlogTagKeyFuncBlockStart, func_block_name)
+
+#endif

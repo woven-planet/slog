@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_primitives_record
+#define slog_cc_primitives_record
 
 #include <string>
 #include <utility>
@@ -59,3 +60,5 @@ class SlogRecord {
 };
 
 }  // namespace slog
+
+#endif

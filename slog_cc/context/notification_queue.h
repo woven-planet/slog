@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_context_notification_queue
+#define slog_cc_context_notification_queue
 
 #include <condition_variable>
 #include <functional>
@@ -82,3 +83,5 @@ class SlogAsyncNotificationQueue {
 };
 
 }  // namespace slog
+
+#endif

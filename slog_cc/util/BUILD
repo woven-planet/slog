@@ -10,13 +10,13 @@ cc_library(
 
 cc_library(
     name = "string_util",
-    srcs = ["string_util.cc"],
+    srcs = ["string_util.cpp"],
     hdrs = ["string_util.h"],
 )
 
 cc_test(
     name = "string_util_test",
-    srcs = ["string_util_test.cc"],
+    srcs = ["string_util_test.cpp"],
     deps = [
         ":string_util",
         "@com_github_google_googletest//:gtest_main",

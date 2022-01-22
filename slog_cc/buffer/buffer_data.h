@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_buffer_buffer_data
+#define slog_cc_buffer_buffer_data
 
 #include <memory>
 #include <vector>
@@ -16,3 +17,5 @@ struct SlogBufferData {
 };
 
 }  // namespace slog
+
+#endif

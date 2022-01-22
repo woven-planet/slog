@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_util_string_util
+#define slog_cc_util_string_util
 
 #include <sstream>
 #include <string>
@@ -63,3 +64,5 @@ std::string stringPrintf(const char* format, ...);
 
 }  // namespace util
 }  // end namespace slog
+
+#endif

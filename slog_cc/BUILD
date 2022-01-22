@@ -21,7 +21,7 @@ cc_library(
 
 cc_test(
     name = "slog_test",
-    srcs = ["slog_test.cc"],
+    srcs = ["slog_test.cpp"],
     deps = [
         ":slog_cc",
         "//slog_cc/context",

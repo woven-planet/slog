@@ -6,8 +6,8 @@ package(default_visibility = [
 cc_library(
     name = "primitives_cc",
     srcs = [
-        "record.cc",
-        "tag.cc",
+        "record.cpp",
+        "tag.cpp",
     ],
     hdrs = [
         "call_site.h",

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_primitives_timestamps
+#define slog_cc_primitives_timestamps
 
 namespace slog {
 
@@ -27,3 +28,5 @@ struct SlogTimestamps {
 };
 
 }  // namespace slog
+
+#endif

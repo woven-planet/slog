@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_buffer_buffer
+#define slog_cc_buffer_buffer
 
 #include <mutex>
 #include <vector>
@@ -38,3 +39,5 @@ class SlogBuffer {
 };
 
 }  // namespace slog
+
+#endif

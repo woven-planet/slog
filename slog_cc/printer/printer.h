@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_printer_printer
+#define slog_cc_printer_printer
 
 #include <string>
 #include <vector>
@@ -35,3 +36,5 @@ class SlogPrinter {
 };
 
 }  // namespace slog
+
+#endif

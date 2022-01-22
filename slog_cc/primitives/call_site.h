@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_primitives_call_site
+#define slog_cc_primitives_call_site
 
 #include <string>
 
@@ -23,3 +24,5 @@ class SlogCallSite {
 };
 
 }  // namespace slog
+
+#endif

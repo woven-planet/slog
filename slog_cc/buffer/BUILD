@@ -7,7 +7,7 @@ package(default_visibility = [
 cc_library(
     name = "buffer_cc",
     srcs = [
-        "buffer.cc",
+        "buffer.cpp",
     ],
     hdrs = [
         "buffer.h",
@@ -27,7 +27,7 @@ cc_library(
 
 cc_test(
     name = "buffer_cc_test",
-    srcs = ["buffer_test.cc"],
+    srcs = ["buffer_test.cpp"],
     deps = [
         ":buffer_cc",
         "//slog_cc",

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_context_subscribers
+#define slog_cc_context_subscribers
 
 #include <functional>
 #include <memory>
@@ -52,3 +53,5 @@ class SlogContextSubscribers {
 };
 
 }  // namespace slog
+
+#endif

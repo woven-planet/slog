@@ -1,6 +1,6 @@
 cc_binary(
     name = "clock",
-    srcs = ["clock.cc"],
+    srcs = ["clock.cpp"],
     copts = [
         "-DNDEBUG",
         "-g0",
@@ -14,7 +14,7 @@ cc_binary(
 
 cc_binary(
     name = "slog_benchmark",
-    srcs = ["slog_benchmark.cc"],
+    srcs = ["slog_benchmark.cpp"],
     copts = [
         "-DNDEBUG",
         "-g0",
@@ -38,7 +38,7 @@ cc_binary(
 # TODO(vsbus): fix benchmark
 cc_test(
     name = "slog_benchmark_concurrency",
-    srcs = ["slog_benchmark_concurrency.cc"],
+    srcs = ["slog_benchmark_concurrency.cpp"],
     tags = ["manual"],
     deps = [
         ":slog_cc",
@@ -49,7 +49,7 @@ cc_test(
 # TODO(vsbus): recover stress tests and resolve deps.
 # cc_binary(
 #     name = "slog_concurrency_stress_test",
-#     srcs = ["slog_concurrency_stress_test.cc"],
+#     srcs = ["slog_concurrency_stress_test.cpp"],
 #     deps = [
 #         ":slog_cc",
 #         "//slog_cc/common/util:init",
@@ -59,7 +59,7 @@ cc_test(
 #
 # cc_binary(
 #     name = "slog_system_perf_test",
-#     srcs = ["slog_system_perf_test.cc"],
+#     srcs = ["slog_system_perf_test.cpp"],
 #     tags = ["manual"],
 #     deps = [
 #         ":slog_cc",

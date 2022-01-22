@@ -107,7 +107,7 @@ TEST_F(SlogTest, basic) {
     EXPECT_EQ(call_site_id, slog_records_.back().call_site_id());
     const SlogCallSite call_site =
         SlogContext::getInstance()->getCallSite(call_site_id);
-    EXPECT_EQ("slog_cc/slog_test.cc", call_site.file());
+    EXPECT_EQ("slog_cc/slog_test.cpp", call_site.file());
     EXPECT_EQ(__LINE__ - 12, call_site.line());
     EXPECT_EQ("TestBody", call_site.function());
   }
@@ -123,7 +123,7 @@ TEST_F(SlogTest, basic) {
     EXPECT_EQ(call_site_id, slog_records_.back().call_site_id());
     const SlogCallSite call_site =
         SlogContext::getInstance()->getCallSite(call_site_id);
-    EXPECT_EQ("slog_cc/slog_test.cc", call_site.file());
+    EXPECT_EQ("slog_cc/slog_test.cpp", call_site.file());
     EXPECT_EQ(__LINE__ - 13, call_site.line());
     EXPECT_EQ("TestBody", call_site.function());
   }
@@ -339,7 +339,7 @@ TEST_F(SlogTest, scope) {
     EXPECT_EQ(call_site_id, slog_records_[0].call_site_id());
     const SlogCallSite call_site =
         SlogContext::getInstance()->getCallSite(call_site_id);
-    EXPECT_EQ("slog_cc/slog_test.cc", call_site.file());
+    EXPECT_EQ("slog_cc/slog_test.cpp", call_site.file());
     EXPECT_EQ(scope_a_line, call_site.line());
     EXPECT_EQ("TestBody", call_site.function());
   }
@@ -365,7 +365,7 @@ TEST_F(SlogTest, scope) {
     EXPECT_EQ(call_site_id, slog_records_[1].call_site_id());
     const SlogCallSite call_site =
         SlogContext::getInstance()->getCallSite(call_site_id);
-    EXPECT_EQ("slog_cc/slog_test.cc", call_site.file());
+    EXPECT_EQ("slog_cc/slog_test.cpp", call_site.file());
     EXPECT_EQ(scope_b_line, call_site.line());
     EXPECT_EQ("TestBody", call_site.function());
   }

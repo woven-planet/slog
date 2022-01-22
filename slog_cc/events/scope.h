@@ -1,4 +1,5 @@
-#pragma once
+#ifndef slog_cc_events_scope
+#define slog_cc_events_scope
 
 #include <string>
 
@@ -49,3 +50,5 @@ class SlogScope {
 };
 
 }  // namespace slog
+
+#endif

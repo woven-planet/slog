@@ -33,7 +33,7 @@ steps:
   - label: ":hammer: AUTOSAR compliance check"
     timeout: 5
     agents:
-      queue: cpu-small
+      queue: cpu-large
     command: scripts/arene_autosar_check.sh
     soft_fail:
       - exit_status: 1
