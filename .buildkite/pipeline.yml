@@ -3,7 +3,7 @@ docker: &docker
   docker#v3.0.1:
     user: buildkite
     always-pull: true
-    image: library.pdx.aws.av.lyft.net/ci/ci-python38-bionic:1.1.3778
+    image: library.pdx.l5.woven-planet.tech/ci/ci-python38-bionic:stable
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/buildkite-agent/.ssh/:/home/buildkite/.ssh/
@@ -30,6 +30,19 @@ retries: &retries
       limit: 3
 
 steps:
+  - label: ":hammer: AUTOSAR compliance check"
+    timeout: 5
+    agents:
+      queue: cpu-small
+    command: scripts/arene_autosar_check.sh
+    soft_fail:
+      - exit_status: 1
+    retry:
+      <<: *retries
+    plugins:
+      <<: *vault
+      <<: *docker
+
   - label: ":hammer: Lint"
     timeout: 5
     agents:
