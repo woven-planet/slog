@@ -55,7 +55,8 @@ int SlogContext::addOrReuseCallSiteVerySlow(const std::string& function,
                                             const std::string& file,
                                             int32_t line) {
   std::unique_lock<std::shared_timed_mutex> lock(call_sites_mutex_);
-  for (size_t i = 0; i < call_sites_.size(); ++i) {
+  const size_t n = call_sites_.size();
+  for (size_t i = 0; i < n; ++i) {
     if (line == call_sites_[i]->line() &&
         function == call_sites_[i]->function() &&
         file == call_sites_[i]->file()) {

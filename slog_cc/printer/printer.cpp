@@ -281,12 +281,8 @@ std::vector<TableField> kTableSchema = {
 std::string renderLine(const Line& line) {
   SLOG_ASSERT(line.size() == kTableSchema.size());
   std::vector<std::string> rendered_line;
-  for (size_t i = 0; i < line.size(); ++i) {
-    // rendered_line.emplace_back(
-    //     line[i].size() <= kTableSchema[i].width
-    //         ? std::string(kTableSchema[i].width - line[i].size(), ' ') + line[i]
-    //         : "..." +
-    //               line[i].substr(line[i].size() - kTableSchema[i].width + 3));
+  const size_t n = line.size();
+  for (size_t i = 0; i < n; ++i) {
     if (line[i].size() <= kTableSchema[i].width) {
       rendered_line.emplace_back(
             std::string(kTableSchema[i].width - line[i].size(), ' ') + line[i]);

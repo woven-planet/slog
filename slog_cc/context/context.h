@@ -28,8 +28,11 @@ class SlogContext {
     return sync_subscribers_.create(callback);
   }
 
-  SLOG_INLINE void notifySubscribers(SlogRecord&& record) {
+  SLOG_INLINE void notifySyncSubscribers(const SlogRecord& record) {
     sync_subscribers_.notify(record);
+  }
+
+  SLOG_INLINE void notifyAsyncSubscribers(SlogRecord&& record) {
     std::shared_lock<std::shared_timed_mutex> lock(
         async_notification_queue_mutex_);
     SLOG_ASSERT(async_notification_queue_.get());

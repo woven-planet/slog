@@ -30,7 +30,9 @@ class SlogEvent {
 
   SLOG_INLINE ~SlogEvent() {
     record_.set_time(SlogContext::getInstance()->getTimestamps());
-    SlogContext::getInstance()->notifySubscribers(std::move(this->record_));
+    SlogContext::getInstance()->notifySyncSubscribers(this->record_);
+    SlogContext::getInstance()->notifyAsyncSubscribers(
+        std::move(this->record_));
   }
 
   SLOG_INLINE const SlogRecord& record() const { return record_; }
