@@ -30,7 +30,35 @@ retries: &retries
       limit: 3
 
 steps:
-  - label: ":hammer: AUTOSAR compliance check"
+  - label: ":hammer: AUTOSAR compliance check (errors)"
+    timeout: 5
+    agents:
+      queue: cpu-large
+    command: scripts/arene_autosar_check.sh error
+    # TODO(vsbus): address errors and remove soft-fail
+    soft_fail:
+      - exit_status: 1
+    retry:
+      <<: *retries
+    plugins:
+      <<: *vault
+      <<: *docker
+
+  - label: ":hammer: AUTOSAR compliance check (warnings)"
+    timeout: 5
+    agents:
+      queue: cpu-large
+    command: scripts/arene_autosar_check.sh warning
+    # TODO(vsbus): address warnings and remove soft-fail
+    soft_fail:
+      - exit_status: 1
+    retry:
+      <<: *retries
+    plugins:
+      <<: *vault
+      <<: *docker
+
+  - label: ":hammer: AUTOSAR compliance check (all)"
     timeout: 5
     agents:
       queue: cpu-large

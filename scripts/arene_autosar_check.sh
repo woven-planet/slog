@@ -35,10 +35,17 @@ mkdir -p build && \
 #             --threads=12 \
 #     '
 
-cat build/codeql-analysis.csv
-wc build/codeql-analysis.csv
+if [[ ! -z "$1" ]]
+then
+    cat build/codeql-analysis.csv | grep $1 >build/output.csv
+else
+    cat build/codeql-analysis.csv >build/output.csv
+fi
 
-if [ -s build/codeql-analysis.csv ]
+cat build/output.csv
+wc build/output.csv
+
+if [ -s build/output.csv ]
 then
     echo "Code is not AUTOSAR compliant."
     exit 1
