@@ -73,8 +73,8 @@ class SlogTest : public ::testing::Test {
                     "time_elapsed_ns[%d] = %lld, time_elapsed_ns[%d] = "
                     "%lld\nprev: %s\n cur: %s\n\n",
                     i - 1, prev.time().elapsed_ns, i, cur.time().elapsed_ns,
-                    SlogPrinter::debugString(prev).c_str(),
-                    SlogPrinter::debugString(cur).c_str())};
+                    SlogPrinter().debugString(prev).c_str(),
+                    SlogPrinter().debugString(cur).c_str())};
       }
     }
     return {true, ""};
@@ -101,7 +101,7 @@ TEST_F(SlogTest, basic) {
   waitSlog();
   ASSERT_EQ(1, slog_records_.size());
 
-  EXPECT_EQ("", SlogPrinter::slogText(slog_records_.back()));
+  EXPECT_EQ("", SlogPrinter().slogText(slog_records_.back()));
   {
     const int32_t call_site_id = 1;
     EXPECT_EQ(call_site_id, slog_records_.back().call_site_id());
@@ -116,8 +116,8 @@ TEST_F(SlogTest, basic) {
   waitSlog();
   ASSERT_EQ(2, slog_records_.size());
 
-  EXPECT_EQ("basic message", SlogPrinter::slogText(slog_records_.back()));
-  EXPECT_EQ("basic message", SlogPrinter::flatText(slog_records_.back()));
+  EXPECT_EQ("basic message", SlogPrinter().slogText(slog_records_.back()));
+  EXPECT_EQ("basic message", SlogPrinter().flatText(slog_records_.back()));
   {
     const int32_t call_site_id = 2;
     EXPECT_EQ(call_site_id, slog_records_.back().call_site_id());
@@ -218,17 +218,17 @@ TEST_F(SlogTest, silent_tag) {
   EXPECT_EQ(1, countTags(slog_records_.back().tags(), "silent_tag_1"));
   EXPECT_EQ(1, countTags(slog_records_.back().tags(), "silent_tag_2"));
   EXPECT_EQ(0, countTags(slog_records_.back().tags(), "silent_tag_3"));
-  EXPECT_EQ(SlogPrinter::debugString(
+  EXPECT_EQ(SlogPrinter().debugString(
                 SlogTag("silent_tag_1", SlogTagVerbosity::kSilent)),
-            SlogPrinter::debugString(
+            SlogPrinter().debugString(
                 getTag(slog_records_.back().tags(), "silent_tag_1")));
   EXPECT_EQ(
-      SlogPrinter::debugString(SlogTag("silent_tag_2", "silent_tag_2_value",
-                                       SlogTagVerbosity::kSilent)),
-      SlogPrinter::debugString(
+      SlogPrinter().debugString(SlogTag("silent_tag_2", "silent_tag_2_value",
+                                        SlogTagVerbosity::kSilent)),
+      SlogPrinter().debugString(
           getTag(slog_records_.back().tags(), "silent_tag_2")));
-  EXPECT_EQ("", SlogPrinter::slogText(slog_records_.back()));
-  EXPECT_EQ("", SlogPrinter::flatText(slog_records_.back()));
+  EXPECT_EQ("", SlogPrinter().slogText(slog_records_.back()));
+  EXPECT_EQ("", SlogPrinter().flatText(slog_records_.back()));
 }
 
 TEST_F(SlogTest, noisy_tag) {
@@ -238,13 +238,13 @@ TEST_F(SlogTest, noisy_tag) {
   ASSERT_EQ(1, slog_records_.size());
 
   EXPECT_EQ(1, countTags(slog_records_.back().tags(), "noisy_tag"));
-  EXPECT_EQ(SlogPrinter::debugString(SlogTag("noisy_tag", "noisy_tag_value",
-                                             SlogTagVerbosity::kNoisy)),
-            SlogPrinter::debugString(
+  EXPECT_EQ(SlogPrinter().debugString(SlogTag("noisy_tag", "noisy_tag_value",
+                                              SlogTagVerbosity::kNoisy)),
+            SlogPrinter().debugString(
                 getTag(slog_records_.back().tags(), "noisy_tag")));
-  EXPECT_EQ("tag: <noisy_tag>", SlogPrinter::slogText(slog_records_.back()));
+  EXPECT_EQ("tag: <noisy_tag>", SlogPrinter().slogText(slog_records_.back()));
   EXPECT_EQ("tag: noisy_tag_value",
-            SlogPrinter::flatText(slog_records_.back()));
+            SlogPrinter().flatText(slog_records_.back()));
   SLOG(INFO) << "Hi " << SlogTag("username", "Neo") << ". Follow the "
              << std::string("rabbit") << " number " << 4 << 2 << " in " << 0.5
              << " hours.";
@@ -255,31 +255,32 @@ TEST_F(SlogTest, noisy_tag) {
   EXPECT_EQ(
       "Hi <username>. Follow the <_t0_s> number <_t1_i><_t2_i> in <_t3_f> "
       "hours.",
-      SlogPrinter::slogText(slog_records_.back()));
+      SlogPrinter().slogText(slog_records_.back()));
   EXPECT_EQ("Hi Neo. Follow the rabbit number 42 in 0.500000 hours.",
-            SlogPrinter::flatText(slog_records_.back()));
+            SlogPrinter().flatText(slog_records_.back()));
   EXPECT_EQ(1, countTags(slog_records_.back().tags(), "username"));
   EXPECT_EQ(1, countTags(slog_records_.back().tags(), "_t0_s"));
   EXPECT_EQ(1, countTags(slog_records_.back().tags(), "_t1_i"));
   EXPECT_EQ(1, countTags(slog_records_.back().tags(), "_t3_f"));
   EXPECT_EQ(1, countTags(slog_records_.back().tags(), "_t2_i"));
-  EXPECT_EQ(SlogPrinter::debugString(
+  EXPECT_EQ(SlogPrinter().debugString(
                 SlogTag("username", "Neo", SlogTagVerbosity::kNoisy)),
-            SlogPrinter::debugString(
+            SlogPrinter().debugString(
                 getTag(slog_records_.back().tags(), "username")));
   EXPECT_EQ(
-      SlogPrinter::debugString(
+      SlogPrinter().debugString(
           SlogTag("_t0_s", "rabbit", SlogTagVerbosity::kNoisy)),
-      SlogPrinter::debugString(getTag(slog_records_.back().tags(), "_t0_s")));
+      SlogPrinter().debugString(getTag(slog_records_.back().tags(), "_t0_s")));
   EXPECT_EQ(
-      SlogPrinter::debugString(SlogTag("_t1_i", 4, SlogTagVerbosity::kNoisy)),
-      SlogPrinter::debugString(getTag(slog_records_.back().tags(), "_t1_i")));
+      SlogPrinter().debugString(SlogTag("_t1_i", 4, SlogTagVerbosity::kNoisy)),
+      SlogPrinter().debugString(getTag(slog_records_.back().tags(), "_t1_i")));
   EXPECT_EQ(
-      SlogPrinter::debugString(SlogTag("_t2_i", 2, SlogTagVerbosity::kNoisy)),
-      SlogPrinter::debugString(getTag(slog_records_.back().tags(), "_t2_i")));
+      SlogPrinter().debugString(SlogTag("_t2_i", 2, SlogTagVerbosity::kNoisy)),
+      SlogPrinter().debugString(getTag(slog_records_.back().tags(), "_t2_i")));
   EXPECT_EQ(
-      SlogPrinter::debugString(SlogTag("_t3_f", 0.5, SlogTagVerbosity::kNoisy)),
-      SlogPrinter::debugString(getTag(slog_records_.back().tags(), "_t3_f")));
+      SlogPrinter().debugString(
+          SlogTag("_t3_f", 0.5, SlogTagVerbosity::kNoisy)),
+      SlogPrinter().debugString(getTag(slog_records_.back().tags(), "_t3_f")));
 }
 
 TEST_F(SlogTest, scope) {
@@ -319,21 +320,21 @@ TEST_F(SlogTest, scope) {
   waitSlog();
   ASSERT_EQ(6, slog_records_.size());
 
+  EXPECT_EQ(SlogPrinter().debugString(
+                SlogTag(".scope_name", "scope_a", SlogTagVerbosity::kSilent)),
+            SlogPrinter().debugString(
+                getTag(slog_records_[0].tags(), ".scope_name")));
   EXPECT_EQ(
-      SlogPrinter::debugString(
-          SlogTag(".scope_name", "scope_a", SlogTagVerbosity::kSilent)),
-      SlogPrinter::debugString(getTag(slog_records_[0].tags(), ".scope_name")));
-  EXPECT_EQ(
-      SlogPrinter::debugString(
+      SlogPrinter().debugString(
           SlogTag(".scope_id", 1, SlogTagVerbosity::kSilent)),
-      SlogPrinter::debugString(getTag(slog_records_[0].tags(), ".scope_id")));
-  EXPECT_EQ(SlogPrinter::debugString(
+      SlogPrinter().debugString(getTag(slog_records_[0].tags(), ".scope_id")));
+  EXPECT_EQ(SlogPrinter().debugString(
                 SlogTag(kSlogTagKeyScopeDepth, 1, SlogTagVerbosity::kSilent)),
-            SlogPrinter::debugString(
+            SlogPrinter().debugString(
                 getTag(slog_records_[0].tags(), kSlogTagKeyScopeDepth)));
   EXPECT_EQ(1, countTags(slog_records_[0].tags(), ".scope_open"));
   EXPECT_EQ(0, countTags(slog_records_[0].tags(), ".scope_close"));
-  EXPECT_EQ("", SlogPrinter::slogText(slog_records_[0]));
+  EXPECT_EQ("", SlogPrinter().slogText(slog_records_[0]));
   {
     const int32_t call_site_id = 1;
     EXPECT_EQ(call_site_id, slog_records_[0].call_site_id());
@@ -344,21 +345,21 @@ TEST_F(SlogTest, scope) {
     EXPECT_EQ("TestBody", call_site.function());
   }
 
+  EXPECT_EQ(SlogPrinter().debugString(
+                SlogTag(".scope_name", "scope_b", SlogTagVerbosity::kSilent)),
+            SlogPrinter().debugString(
+                getTag(slog_records_[1].tags(), ".scope_name")));
   EXPECT_EQ(
-      SlogPrinter::debugString(
-          SlogTag(".scope_name", "scope_b", SlogTagVerbosity::kSilent)),
-      SlogPrinter::debugString(getTag(slog_records_[1].tags(), ".scope_name")));
-  EXPECT_EQ(
-      SlogPrinter::debugString(
+      SlogPrinter().debugString(
           SlogTag(".scope_id", 2, SlogTagVerbosity::kSilent)),
-      SlogPrinter::debugString(getTag(slog_records_[1].tags(), ".scope_id")));
-  EXPECT_EQ(SlogPrinter::debugString(
+      SlogPrinter().debugString(getTag(slog_records_[1].tags(), ".scope_id")));
+  EXPECT_EQ(SlogPrinter().debugString(
                 SlogTag(kSlogTagKeyScopeDepth, 2, SlogTagVerbosity::kSilent)),
-            SlogPrinter::debugString(
+            SlogPrinter().debugString(
                 getTag(slog_records_[1].tags(), kSlogTagKeyScopeDepth)));
   EXPECT_EQ(1, countTags(slog_records_[1].tags(), ".scope_open"));
   EXPECT_EQ(0, countTags(slog_records_[1].tags(), ".scope_close"));
-  EXPECT_EQ("", SlogPrinter::slogText(slog_records_[1]));
+  EXPECT_EQ("", SlogPrinter().slogText(slog_records_[1]));
   EXPECT_EQ(2, slog_records_[1].call_site_id());
   {
     const int32_t call_site_id = 2;
@@ -370,40 +371,40 @@ TEST_F(SlogTest, scope) {
     EXPECT_EQ("TestBody", call_site.function());
   }
 
-  EXPECT_EQ(SlogPrinter::debugString(
+  EXPECT_EQ(SlogPrinter().debugString(
                 SlogTag(kMyTag, "My tag value", SlogTagVerbosity::kSilent)),
-            SlogPrinter::debugString(getTag(slog_records_[3].tags(), kMyTag)));
-  EXPECT_EQ(SlogPrinter::debugString(
+            SlogPrinter().debugString(getTag(slog_records_[3].tags(), kMyTag)));
+  EXPECT_EQ(SlogPrinter().debugString(
                 SlogTag(kSlogTagKeyScopeId, 3, SlogTagVerbosity::kSilent)),
-            SlogPrinter::debugString(
+            SlogPrinter().debugString(
                 getTag(slog_records_[3].tags(), kSlogTagKeyScopeId)));
-  EXPECT_EQ(SlogPrinter::debugString(
+  EXPECT_EQ(SlogPrinter().debugString(
                 SlogTag(kSlogTagKeyScopeDepth, 2, SlogTagVerbosity::kSilent)),
-            SlogPrinter::debugString(
+            SlogPrinter().debugString(
                 getTag(slog_records_[3].tags(), kSlogTagKeyScopeDepth)));
 
   EXPECT_EQ(
-      SlogPrinter::debugString(
+      SlogPrinter().debugString(
           SlogTag(".scope_id", 3, SlogTagVerbosity::kSilent)),
-      SlogPrinter::debugString(getTag(slog_records_[4].tags(), ".scope_id")));
+      SlogPrinter().debugString(getTag(slog_records_[4].tags(), ".scope_id")));
   EXPECT_EQ(0, countTags(slog_records_[4].tags(), ".scope_name"));
   EXPECT_EQ(0, countTags(slog_records_[4].tags(), ".scope_open"));
   EXPECT_EQ(1, countTags(slog_records_[4].tags(), ".scope_close"));
-  EXPECT_EQ("", SlogPrinter::slogText(slog_records_[4]));
+  EXPECT_EQ("", SlogPrinter().slogText(slog_records_[4]));
   EXPECT_EQ(0, slog_records_[4].call_site_id());
   EXPECT_EQ("", SlogContext::getInstance()->getCallSite(0).file());
   EXPECT_EQ(0, SlogContext::getInstance()->getCallSite(0).line());
   EXPECT_EQ("", SlogContext::getInstance()->getCallSite(0).function());
 
   EXPECT_EQ(
-      SlogPrinter::debugString(
+      SlogPrinter().debugString(
           SlogTag(".scope_id", 1, SlogTagVerbosity::kSilent)),
-      SlogPrinter::debugString(getTag(slog_records_[5].tags(), ".scope_id")));
+      SlogPrinter().debugString(getTag(slog_records_[5].tags(), ".scope_id")));
   EXPECT_EQ(0, countTags(slog_records_[5].tags(), ".scope_name"));
   EXPECT_EQ(0, countTags(slog_records_[5].tags(), ".scope_open"));
   EXPECT_EQ(1, countTags(slog_records_[5].tags(), ".scope_close"));
-  EXPECT_EQ("", SlogPrinter::slogText(slog_records_[5]));
-  EXPECT_EQ("", SlogPrinter::slogText(slog_records_[5]));
+  EXPECT_EQ("", SlogPrinter().slogText(slog_records_[5]));
+  EXPECT_EQ("", SlogPrinter().slogText(slog_records_[5]));
   EXPECT_EQ(0, slog_records_[5].call_site_id());
   EXPECT_EQ("", SlogContext::getInstance()->getCallSite(0).file());
   EXPECT_EQ(0, SlogContext::getInstance()->getCallSite(0).line());

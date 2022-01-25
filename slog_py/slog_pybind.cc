@@ -68,7 +68,7 @@ PYBIND11_MODULE(slog_pybind, m) {
   pybind11::class_<slog::SlogRecord>(m, "SlogRecord")
       .def(pybind11::init<int32_t, int32_t, int8_t>())
       .def("__str__", [](const slog::SlogRecord& record) {
-        return slog::SlogPrinter::jsonString(record);
+        return slog::SlogPrinter().jsonString(record);
       });
 
   pybind11::class_<slog::SlogCallSite>(m, "SlogCallSite")

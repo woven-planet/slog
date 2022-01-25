@@ -5,32 +5,32 @@
 
 // clang-format off
 // Logs emit data to std streams, to run benchmark not printing lots of logs run
-// $> bazelisk build slog_cc/benchmarks:slog_benchmark && bazel-bin/slog_cc/benchmarks/slog_benchmark 2>/dev/null
+// $ bazelisk run slog_cc/benchmarks:slog_benchmark 2>/dev/null
 // ---------------------------------------------------------------------------------------
 // Benchmark                                             Time             CPU   Iterations
 // ---------------------------------------------------------------------------------------
-// SlogBenchmark/basic                                 303 ns          303 ns      2301294
-// SlogBenchmark/tag_no_value_silent                   353 ns          353 ns      1990034
-// SlogBenchmark/tag_int_silent                        350 ns          350 ns      2004105
-// SlogBenchmark/tag_double_silent                     351 ns          351 ns      1996570
-// SlogBenchmark/tag_string_silent                     371 ns          371 ns      1890267
-// SlogBenchmark/two_tag_silent                        399 ns          399 ns      1753460
-// SlogBenchmark/scope                                 848 ns          848 ns       822531
-// SlogBenchmark/msg_and_10_tags_silent                543 ns          543 ns      1281703
-// SlogBenchmark/10_tags_jkey_char_silent              493 ns          493 ns      1408597
-// SlogBenchmark/10_tags_jkey_rvalue_str_silent        522 ns          522 ns      1353928
-// SlogBenchmark/10_tags_jkey_lvalue_str_silent        518 ns          518 ns      1349733
-// SlogBenchmark/10_tags_kv_char_silent                590 ns          590 ns      1189719
-// SlogBenchmark/10_tags_kv_rvalue_str_silent          571 ns          571 ns      1228567
-// SlogBenchmark/10_tags_kv_lvalue_str_silent          556 ns          555 ns      1248910
-// SlogBenchmark/msg_and_10_tags_noisy                5277 ns         5277 ns       133200
-// SlogBenchmark/stream_10_chars                      4346 ns         4346 ns       161008
-// SlogBenchmark/stream_10_lvalue_strings             5353 ns         5352 ns       130986
-// SlogBenchmark/stream_10_rvalue_strings             5318 ns         5318 ns       131863
-// SlogBenchmark/10_tags_noisy                        4438 ns         4438 ns       158008
-// SlogBenchmark/dummy_str                            4145 ns         4145 ns       168601
-// SlogBenchmark/glog_dummy_str                       2430 ns         2430 ns       286799
-// SlogBenchmark/slow_callback                         927 ns          927 ns       744835
+// SlogBenchmark/basic                                 329 ns          329 ns      2120973
+// SlogBenchmark/tag_no_value_silent                   395 ns          395 ns      1768974
+// SlogBenchmark/tag_int_silent                        395 ns          395 ns      1768959
+// SlogBenchmark/tag_double_silent                     396 ns          396 ns      1767323
+// SlogBenchmark/tag_string_silent                     407 ns          407 ns      1715400
+// SlogBenchmark/two_tag_silent                        425 ns          425 ns      1633651
+// SlogBenchmark/scope                                 893 ns          893 ns       785835
+// SlogBenchmark/msg_and_10_tags_silent                566 ns          566 ns      1250293
+// SlogBenchmark/10_tags_jkey_char_silent              525 ns          525 ns      1344905
+// SlogBenchmark/10_tags_jkey_rvalue_str_silent        542 ns          542 ns      1294311
+// SlogBenchmark/10_tags_jkey_lvalue_str_silent        531 ns          531 ns      1333351
+// SlogBenchmark/10_tags_kv_char_silent                604 ns          604 ns      1155550
+// SlogBenchmark/10_tags_kv_rvalue_str_silent          594 ns          594 ns      1179267
+// SlogBenchmark/10_tags_kv_lvalue_str_silent          565 ns          565 ns      1225421
+// SlogBenchmark/msg_and_10_tags_noisy                5156 ns         5156 ns       135664
+// SlogBenchmark/stream_10_chars                      4307 ns         4307 ns       161889
+// SlogBenchmark/stream_10_lvalue_strings             5362 ns         5362 ns       131462
+// SlogBenchmark/stream_10_rvalue_strings             5343 ns         5342 ns       130611
+// SlogBenchmark/10_tags_noisy                        4405 ns         4405 ns       158435
+// SlogBenchmark/dummy_str                            4159 ns         4159 ns       168137
+// SlogBenchmark/glog_dummy_str                       2438 ns         2438 ns       288016
+// SlogBenchmark/slow_callback                         975 ns          975 ns       703062
 // clang-format on
 
 namespace slog {

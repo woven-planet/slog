@@ -115,7 +115,7 @@ class SlogContext {
 
   SLOG_INLINE void emitStderrLine(const SlogRecord& record) {
     if (record.severity() == FATAL || record.isNoisy()) {
-      SlogPrinter::emitStderrLine(record, getCallSite(record.call_site_id()));
+      slog_printer_.emitStderrLine(record, getCallSite(record.call_site_id()));
     }
   }
 
@@ -130,6 +130,7 @@ class SlogContext {
   std::shared_timed_mutex call_sites_mutex_;
 
   std::function<SlogTimestamps()> get_timestamps_func_;
+  SlogPrinter slog_printer_;
 };
 
 }  // namespace slog
