@@ -12,7 +12,8 @@ std::vector<std::string> split(const std::string& s, const char delim,
   std::stringstream ss;
   ss.str(s);
 
-  for (std::string item; std::getline(ss, item, delim);) {
+  std::string item;
+  while (!std::getline(ss, item, delim).fail()) {
     // filter out possible two or more spaces in the string s if necessary.
     if (!remove_empty_tokens || !item.empty()) {
       tokens.emplace_back(std::move(item));

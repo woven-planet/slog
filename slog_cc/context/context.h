@@ -18,7 +18,7 @@ namespace slog {
 
 class SlogContext {
  public:
-  static std::shared_ptr<SlogContext> getInstance();
+  static std::shared_ptr<SlogContext> getInstance() noexcept;
 
   SlogSubscriber createAsyncSubscriber(const SlogCallback& callback) {
     return async_subscribers_.create(callback);
@@ -28,11 +28,11 @@ class SlogContext {
     return sync_subscribers_.create(callback);
   }
 
-  SLOG_INLINE void notifySyncSubscribers(const SlogRecord& record) {
+  SLOG_INLINE void notifySyncSubscribers(const SlogRecord& record) noexcept {
     sync_subscribers_.notify(record);
   }
 
-  SLOG_INLINE void notifyAsyncSubscribers(SlogRecord&& record) {
+  SLOG_INLINE void notifyAsyncSubscribers(SlogRecord&& record) noexcept {
     std::shared_lock<std::shared_timed_mutex> lock(
         async_notification_queue_mutex_);
     SLOG_ASSERT(async_notification_queue_.get());
@@ -93,7 +93,7 @@ class SlogContext {
 
   // NOTE: time methods are not thread-safe.
   /// Captures current timestamps using default of user-defined implementation.
-  SlogTimestamps getTimestamps() const;
+  SlogTimestamps getTimestamps() const noexcept;
   /// Overrides implementation of getTimestamps().
   void setGetTimestampsFunc(const std::function<SlogTimestamps()>& func);
   /// A default implementation of getTimestamps().

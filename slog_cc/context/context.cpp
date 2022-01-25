@@ -2,9 +2,13 @@
 
 namespace slog {
 
-std::shared_ptr<SlogContext> SlogContext::getInstance() {
-  static auto& context = *new std::shared_ptr<SlogContext>(new SlogContext());
-  return context;
+std::shared_ptr<SlogContext> SlogContext::getInstance() noexcept {
+  try {
+    static auto& context = *new std::shared_ptr<SlogContext>(new SlogContext());
+    return context;
+  } catch (std::exception&) {
+    SLOG_ASSERT(false && "Failed to create SlogContext");
+  }
 }
 
 SlogContext::SlogContext() : get_timestamps_func_(kDefaultGetTimestampsFunc) {
@@ -14,7 +18,7 @@ SlogContext::SlogContext() : get_timestamps_func_(kDefaultGetTimestampsFunc) {
       [this](const SlogRecord& record) { emitStderrLine(record); });
 }
 
-SlogTimestamps SlogContext::getTimestamps() const {
+SlogTimestamps SlogContext::getTimestamps() const noexcept {
   return get_timestamps_func_();
 }
 
