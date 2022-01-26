@@ -20,38 +20,22 @@ namespace util {
 //
 // std::vector<int> data2;
 // LOG(INFO) << join(data2, "\n");
-// // join with formatting
-// LOG(INFO) << join(data2, "\n", [](int a) { stringPrintf("%08x", a);} );
 //
 // More examples in string_util_test.cc
-template <typename Iterator, typename F>
-std::string join(const Iterator& begin, const Iterator& end,
-                 const std::string& delimiter, const F& f) {
+template <class T>
+std::string join(const std::vector<T>& container,
+                 const std::string& delimiter) {
   std::stringstream stream;
-  for (Iterator i = begin; i != end; ++i) {
-    if (i != begin) stream << delimiter;
-    stream << f(*i);
+  bool empty = true;
+  for (const auto& item : container) {
+    if (empty) {
+      empty = false;
+    } else {
+      stream << delimiter;
+    }
+    stream << item;
   }
   return stream.str();
-}
-
-template <typename Container, typename F>
-std::string join(const Container& container, const std::string& delimiter,
-                 const F& f) {
-  return join(container.begin(), container.end(), delimiter, f);
-}
-
-template <typename Iterator>
-std::string join(const Iterator& begin, const Iterator& end,
-                 const std::string& delimiter = ", ") {
-  return join(begin, end, delimiter,
-              [](const typename Iterator::value_type& elem) { return elem; });
-}
-
-template <typename Container>
-std::string join(const Container& container,
-                 const std::string& delimiter = ", ") {
-  return join(container.begin(), container.end(), delimiter);
 }
 
 std::vector<std::string> split(const std::string& s, const char delim,

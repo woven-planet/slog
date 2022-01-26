@@ -32,9 +32,9 @@ void SlogContextSubscribers::removeCallback(SlogCallbackId callback_id) {
 
   auto new_callbacks =
       std::make_shared<std::vector<std::shared_ptr<SlogCallback>>>();
-  for (auto it = callbacks_->begin(); it != callbacks_->end(); ++it) {
-    if (it->get() != callback_id) {
-      new_callbacks->push_back(*it);
+  for (const std::shared_ptr<SlogCallback>& item : *callbacks_) {
+    if (item.get() != callback_id) {
+      new_callbacks->push_back(item);
     }
   }
   callbacks_ = new_callbacks;
