@@ -26,6 +26,7 @@ Instructions:
 * `bazelisk test --test_output=errors //...` -- run all unit tests.
 
 ## Code formatting
+* For the first time, install linters with `./scripts/install_linters.sh `
 * `scripts/lint.sh ./ -i` -- automatically format all code.
 
 ## Releases.
