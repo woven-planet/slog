@@ -73,7 +73,7 @@ class SlogPyTest(unittest.TestCase):
             record_0 = json.loads(str(records[0]))
             call_site = call_sites[int(record_0['call_site_id'])]
             self.assertTrue(call_site.file().endswith('slog_py/slog_test.py'))
-            self.assertEqual(51, call_site.line())
+            self.assertEqual(65, call_site.line())
             self.assertEqual('test_call_site', call_site.function())
 
     def test_scope(self):
@@ -91,7 +91,7 @@ class SlogPyTest(unittest.TestCase):
             record_0 = json.loads(str(records[0]))
             call_site = call_sites[int(record_0['call_site_id'])]
             self.assertTrue(call_site.file().endswith('slog_py/slog_test.py'))
-            self.assertEqual(67, call_site.line())
+            self.assertEqual(81, call_site.line())
             self.assertEqual('test_scope', call_site.function())
             self.assertEqual(5, len(record_0['tags']))
             self.assertEqual('.scope_name', record_0['tags'][0]['key'])
@@ -123,7 +123,7 @@ class SlogPyTest(unittest.TestCase):
             record_0 = json.loads(str(records[0]))
             call_site = call_sites[int(record_0['call_site_id'])]
             self.assertTrue(call_site.file().endswith('slog_py/slog_test.py'))
-            self.assertEqual(100, call_site.line())
+            self.assertEqual(114, call_site.line())
             self.assertEqual('test_scope_decorator', call_site.function())
             self.assertEqual(4, len(record_0['tags']))
             self.assertEqual('.scope_name', record_0['tags'][0]['key'])
@@ -158,7 +158,7 @@ class SlogPyTest(unittest.TestCase):
             record_0 = json.loads(str(records[0]))
             call_site = call_sites[int(record_0['call_site_id'])]
             self.assertTrue(call_site.file().endswith('slog_py/slog_test.py'))
-            self.assertEqual(130, call_site.line())
+            self.assertEqual(144, call_site.line())
             self.assertEqual('test_scope_with_exception', call_site.function())
             self.assertEqual(4, len(record_0['tags']))
             self.assertEqual('.scope_name', record_0['tags'][0]['key'])
