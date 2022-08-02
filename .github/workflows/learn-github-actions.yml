@@ -1,7 +1,7 @@
 name: learn-github-actions
 on: [push]
 jobs:
-  Test and Build All:
+  test-and-build-all:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
