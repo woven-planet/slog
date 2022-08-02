@@ -34,8 +34,8 @@ steps:
     timeout: 5
     agents:
       queue: cpu-large
+    # TODO(vsbus): add steps for `warning` and all (i.e. empty args)
     command: scripts/arene_autosar_check.sh error
-    # TODO(vsbus): address errors and remove soft-fail
     soft_fail:
       - exit_status: 1
     retry:

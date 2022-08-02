@@ -11,4 +11,98 @@ jobs:
       - run: "scripts/setup_dev_env.sh"
       - run: "bazelisk test --test_output=errors //..."
       - run: "bazelisk build //..."
+  
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: "scripts/install_linters.sh && scripts/lint.sh ./"
 
+  package-slog-repo-zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: "sudo apt update"
+      - run: "sudo apt install zip -y"
+      - run: "pkg_slog_repo_zip/zip_and_upload_to_artifactory.sh $(cat VERSION).${BUILDKITE_BUILD_NUMBER}"
+
+  package-slog-py-wheel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: "scripts/setup_dev_env.sh"
+      - run: "sudo apt update"
+      - run: "sudo apt install twine -y"
+      - run: "cd pkg_slog_py_wheel"
+      - run: "./prepare_build.sh $(cat ../VERSION).${BUILDKITE_BUILD_NUMBER}"
+      - run: "./pypi_nexus_login.sh"
+
+#   - label: ":hammer: AUTOSAR compliance check (errors)"
+#     timeout: 5
+#     agents:
+#       queue: cpu-large
+#     # TODO(vsbus): add steps for `warning` and all (i.e. empty args)
+#     command: scripts/arene_autosar_check.sh error
+#     soft_fail:
+#       - exit_status: 1
+#     retry:
+#       <<: *retries
+#     plugins:
+#       <<: *vault
+#       <<: *docker
+
+# TODO(viktor): add wait of above steps and enable import tests:
+#  - wait
+#
+#  - label: ":rocket: System Test: Import slog_cc via bazel"
+#    timeout: 5
+#    agents:
+#      queue: cpu-small
+#    commands:
+#      - "scripts/setup_dev_env.sh"
+#      - "cd test_import/example_project_cc/"
+#      - "./prepare_workspace.sh $(cat ../../VERSION).${BUILDKITE_BUILD_NUMBER}"
+#      - "bazelisk test --test_output=errors src:slog_cc_test"
+#    retry:
+#      <<: *retries
+#    plugins:
+#      <<: *vault
+#      <<: *docker
+#
+#  - label: ":rocket: System Test: Import slog_py via bazel"
+#    timeout: 5
+#    agents:
+#      queue: cpu-small
+#    commands:
+#      - "scripts/setup_dev_env.sh"
+#      - "cd test_import/example_project_py/"
+#      - "./prepare_workspace.sh $(cat ../../VERSION).${BUILDKITE_BUILD_NUMBER}"
+#      - "bazelisk test --test_output=errors src:slog_py_test"
+#    retry:
+#      <<: *retries
+#    plugins:
+#      <<: *vault
+#      <<: *docker
+#
+#  - label: ":rocket: System Test: Import slog_py via pip"
+#    timeout: 5
+#    agents:
+#      queue: cpu-small
+#    commands:
+#      - "cd test_import/example_project_py_via_pip/"
+#      - "scripts/setup_env.sh $(cat ../../VERSION).${BUILDKITE_BUILD_NUMBER}"
+#      - "python src/slog_test.py"
+#    retry:
+#      <<: *retries
+#    plugins:
+#      <<: *vault
+#      <<: *docker
