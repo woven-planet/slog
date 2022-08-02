@@ -11,15 +11,16 @@ jobs:
       - run: "scripts/setup_dev_env.sh"
       - run: "bazelisk test --test_output=errors //..."
       - run: "bazelisk build //..."
-  
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-      - run: "scripts/install_linters.sh && scripts/lint.sh ./"
+ 
+  # TODO(viktor): make linter in CI and my machine work equally and enable lint step in CI. 
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '14'
+  #     - run: "scripts/install_linters.sh && scripts/lint.sh ./"
 
   # TODO(viktor): upload file to some temp storage? ideally github with 30 days TTL
   # package-slog-repo-zip:
