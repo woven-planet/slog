@@ -12,8 +12,8 @@ sudo ln -s $HOME/go/bin/buildifier /usr/bin/buildifier
 sudo apt update && sudo apt install clang-format-6.0 -y
 
 # Install Python linter.
-sudo apt-get install python-pip -y
-pip install --upgrade autopep8
+sudo apt-get install python3-pip -y
+pip3 install --upgrade autopep8
 sudo rm -f /usr/bin/autopep8
 sudo ln -s $HOME/.local/bin/autopep8 /usr/bin/autopep8
 
