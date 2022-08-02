@@ -1,13 +1,14 @@
 name: learn-github-actions
 on: [push]
 jobs:
-  check-bats-version:
+  Test and Build All:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '14'
-      - run: echo hello
-      - run: echo world
+      - run: "scripts/setup_dev_env.sh"
+      - run: "bazelisk test --test_output=errors //..."
+      - run: "bazelisk build //..."
 
