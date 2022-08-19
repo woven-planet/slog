@@ -7,7 +7,7 @@ Requirements:
 * C++14
 
 Instructions: 
-* Follow the example from `test_import/example_project_cc` directory.
+* Follow the example from `test_import/example_project_cc_via_bazel` directory.
 
 ## Into a Python project built by Bazel
 Requirements:

@@ -7,9 +7,9 @@ This provides examples that users can use as a guideline. Also these examples ar
 
 # Running locally
 
-Go to `test_import/example_project_cc` directory:
+Go to `test_import/example_project_cc_via_bazel` directory:
 ```
-cd test_import/example_project_cc
+cd test_import/example_project_cc_via_bazel
 ```
 
 To run these test locally a use need to create a proper `WORKSPACE` file based on the `WORKSPACE.template`. It could be done by using `./prepare_workspace.sh` script and providing version to import as an argument. E.g.
