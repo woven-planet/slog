@@ -166,7 +166,7 @@ steps:
     agents:
       queue: cpu-small
     commands:
-      - "cd test_import/example_project_py_via_bazel_via_pip/"
+      - "cd test_import/example_project_py_via_pip/"
       - "scripts/setup_env.sh $(cat ../../VERSION).${BUILDKITE_BUILD_NUMBER}"
       - "python src/slog_test.py"
     retry:
