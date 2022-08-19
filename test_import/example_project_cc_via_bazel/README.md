@@ -12,9 +12,9 @@ Go to `test_import/example_project_cc_via_bazel` directory:
 cd test_import/example_project_cc_via_bazel
 ```
 
-To run these test locally a use need to create a proper `WORKSPACE` file based on the `WORKSPACE.template`. It could be done by using `./prepare_workspace.sh` script and providing version to import as an argument. E.g.
+To run these test locally a user needs to create a proper `WORKSPACE` file based on the `WORKSPACE.template`. It could be done by using `./prepare_workspace.sh` script and providing a `git_commit` as an argument. E.g.
 ```
-./prepare_workspace.sh v0.3.80
+./prepare_workspace.sh 2afe53c1032fe0d8878dbe15828c67e76d940d1b
 ```
 
 When `WORKSPACE` file is generated you can build and run tests with
