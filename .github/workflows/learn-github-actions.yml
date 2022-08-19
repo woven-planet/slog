@@ -78,21 +78,19 @@ jobs:
           ./prepare_workspace.sh $(git log | head -1 | awk '{print($2)}') && \
           bazelisk test --test_output=errors src:slog_cc_test
 
-#  - label: ":rocket: System Test: Import slog_py via bazel"
-#    timeout: 5
-#    agents:
-#      queue: cpu-small
-#    commands:
-#      - "scripts/setup_dev_env.sh"
-#      - "cd test_import/example_project_py/"
-#      - "./prepare_workspace.sh $(cat ../../VERSION).${BUILDKITE_BUILD_NUMBER}"
-#      - "bazelisk test --test_output=errors src:slog_py_test"
-#    retry:
-#      <<: *retries
-#    plugins:
-#      <<: *vault
-#      <<: *docker
-#
+  test-import-slog_py-via-bazel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: "scripts/setup_dev_env.sh"
+      - run: |
+          cd test_import/example_project_py/ && \
+          ./prepare_workspace.sh $(git log | head -1 | awk '{print($2)}') && \
+          bazelisk test --test_output=errors src:slog_py_test
+
 #  - label: ":rocket: System Test: Import slog_py via pip"
 #    timeout: 5
 #    agents:
