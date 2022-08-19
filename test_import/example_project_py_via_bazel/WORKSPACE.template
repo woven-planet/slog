@@ -1,10 +1,11 @@
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-# To import slog into a project we simply need to fetch it using http_archive.
-http_archive(
+# To import slog into a project we simply need to fetch it from GitHub.
+git_repository(
     name = "slog",
-    # Url to exact location of the zip archive, e.g. https://artifactory.pdx.l5.woven-planet.tech/repository/mothership/slog/slog-v.0.4.185.zip
-    url = "https://artifactory.pdx.l5.woven-planet.tech/repository/mothership/{{package_path}}/slog-{{version}}.zip",
+    commit = "{{git_commit}}",
+    remote = "https://github.com/woven-planet/slog.git",
 )
 
 # Note, importing Slog project does not import its transitive deependencies

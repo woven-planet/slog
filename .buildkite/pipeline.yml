@@ -137,7 +137,7 @@ steps:
       queue: cpu-small
     commands:
       - "scripts/setup_dev_env.sh"
-      - "cd test_import/example_project_cc/"
+      - "cd test_import/example_project_cc_via_bazel/"
       - "./prepare_workspace.sh $(cat ../../VERSION).${BUILDKITE_BUILD_NUMBER}"
       - "bazelisk test --test_output=errors src:slog_cc_test"
     retry:
@@ -152,7 +152,7 @@ steps:
       queue: cpu-small
     commands:
       - "scripts/setup_dev_env.sh"
-      - "cd test_import/example_project_py/"
+      - "cd test_import/example_project_py_via_bazel/"
       - "./prepare_workspace.sh $(cat ../../VERSION).${BUILDKITE_BUILD_NUMBER}"
       - "bazelisk test --test_output=errors src:slog_py_test"
     retry:
