@@ -16,7 +16,7 @@ Requirements:
 * pybind11 and pybind11_bazel
 
 Instructions: 
-* Follow the example from `test_import/example_project_py` directory.
+* Follow the example from `test_import/example_project_py_via_bazel` directory.
 
 # Contributing
 ## Installing tools for build
