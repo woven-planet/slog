@@ -1,6 +1,6 @@
-Slog Tracing tool allows to record slog events in the format of Chrome Tracing events so you can visualize them.
+Slog Tracing tool allows recording slog events in the format of Chrome Tracing Events so you can visualize them in Chrome.
 
-For usage example see `example_slog_trace` target in the `BUILD` file and in `example_slog_trace.cpp`. You can run this example with the following command:
+For usage example see `example_slog_trace` target in the `BUILD` file and implementatin in the `example_slog_trace.cpp`. You can run this example with the following command:
 ```
 bazelisk run analysis_tools/tracing:example_slog_trace
 ```
