@@ -27,10 +27,13 @@
     return slog_call_site_id;                                         \
   }())
 
+#define CONCAT(a, b) CONCAT_INNER(a, b)
+#define CONCAT_INNER(a, b) a##b
+
 // C++ standard 12.2.3 guarantees that the SlogEvent is not destroyed before
 // SlogScope's constructor finishes.
-#define SLOG_SCOPE(scope_name) \
-  slog::SlogScope slog_scope = \
+#define SLOG_SCOPE(scope_name)              \
+  slog::SlogScope CONCAT(scope, __LINE__) = \
       SLOG(INFO).addTag(slog::kSlogTagKeyScopeName, scope_name)
 
 #define SLOG_FUNC_BLOCK_START(func_block_name) \

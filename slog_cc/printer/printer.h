@@ -33,6 +33,8 @@ class SlogPrinter {
                                int minute, double second, int thread_id,
                                const std::string& file_name, int lineno,
                                const std::string& msg);
+  std::string stderrLine(const SlogRecord& record,
+                         const SlogCallSite& call_site);
   void emitStderrLine(const SlogRecord& record, const SlogCallSite& call_site);
 
   std::vector<std::string> tableSplitter();

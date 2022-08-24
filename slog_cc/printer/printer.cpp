@@ -77,6 +77,9 @@ class SlogPrinter::Impl {
                 std::vector<std::string>{
                     keyValueString("elapsed_ns", record.time().elapsed_ns),
                     keyValueString("global_ns", record.time().global_ns),
+                    keyValueString(
+                        "global_clock_type_id",
+                        static_cast<int>(record.time().global_clock_type_id)),
                 },
                 ", ") +
             "}",
@@ -142,7 +145,7 @@ class SlogPrinter::Impl {
                               msg.c_str());
   }
 
-  void emitStderrLine(const SlogRecord& r, const SlogCallSite& cs) {
+  std::string stderrLine(const SlogRecord& r, const SlogCallSite& cs) {
     // TODO(vsbus): improve perf ot emitStderrLine(). It regressed 1.5x
     // comparing to using GLOG directly.
     const auto now = [&r] {
@@ -174,12 +177,16 @@ class SlogPrinter::Impl {
     const std::string file_name = util::split(cs.file(), '/').back();
     const int lineno = cs.line();
     const std::string msg = flatText(r);
+
+    return formatStderrLine(severity, month, day, hour, minute, second,
+                            thread_id, file_name, lineno, msg);
+  }
+
+  void emitStderrLine(const SlogRecord& r, const SlogCallSite& cs) {
     // TODO(vsbus): make emitStderr thread-safe by adding locks around printing
     // the line.
-    std::cerr << formatStderrLine(severity, month, day, hour, minute, second,
-                                  thread_id, file_name, lineno, msg)
-              << std::endl;
-    if (severity == FATAL) {
+    std::cerr << stderrLine(r, cs) << std::endl;
+    if (r.severity() == FATAL) {
       abort();
     }
   }
@@ -357,6 +364,11 @@ std::string SlogPrinter::formatStderrLine(uint8_t severity, int month, int day,
                                           int lineno, const std::string& msg) {
   return impl_->formatStderrLine(severity, month, day, hour, minute, second,
                                  thread_id, file_name, lineno, msg);
+}
+
+std::string SlogPrinter::stderrLine(const SlogRecord& record,
+                                    const SlogCallSite& call_site) {
+  return impl_->stderrLine(record, call_site);
 }
 
 void SlogPrinter::emitStderrLine(const SlogRecord& record,
