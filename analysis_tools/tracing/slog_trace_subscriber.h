@@ -32,12 +32,6 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
   auto json_writer_subscriber =
       slog::SlogContext::getInstance()->createAsyncSubscriber(
           [state](const SlogRecord& r) {
-            //      std::string json_record = SlogPrinter().jsonString(r);
-            //      json_record.pop_back();
-            //      json_record += ", \"call_site\": {\"file\": \"" + file +
-            //      "\", \"line\": \"" + std::to_string(line) + "\"}}";
-            //      (*slog_json_file) << json_record << "\n";
-
             if (state->min_ts_ns == -1) {
               state->min_ts_ns = r.time().global_ns;
             } else {
