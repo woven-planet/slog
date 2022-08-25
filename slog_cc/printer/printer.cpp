@@ -77,9 +77,6 @@ class SlogPrinter::Impl {
                 std::vector<std::string>{
                     keyValueString("elapsed_ns", record.time().elapsed_ns),
                     keyValueString("global_ns", record.time().global_ns),
-                    keyValueString(
-                        "global_clock_type_id",
-                        static_cast<int>(record.time().global_clock_type_id)),
                 },
                 ", ") +
             "}",
