@@ -4,5 +4,6 @@ cc_test(
     deps = [
         "@com_github_google_googletest//:gtest_main",
         "@slog//:slog_cc",
+        "@analysis_tools/tracing::slog_trace_subsriber.h"
     ],
 )
