@@ -6,20 +6,7 @@ package(default_visibility = ["//visibility:public"])
 # `#include <slog_cc/context/context.h>`
 cc_library(
     name = "slog_cc",
-    hdrs = [
-        # TODO(vsbus): find a right way to add all hdrs here automatically
-        "//slog_cc/buffer:buffer.h",
-        "//slog_cc/buffer:buffer_data.h",
-        "//slog_cc/context:context.h",
-        "//slog_cc/events:event.h",
-        "//slog_cc/events:scope.h",
-        "//slog_cc/primitives:call_site.h",
-        "//slog_cc/primitives:record.h",
-        "//slog_cc/primitives:tag.h",
-        "//slog_cc/primitives:timestamps.h",
-        "//slog_cc/printer:printer.h",
-        "//slog_cc:slog.h",
-    ],
+    hdrs = glob(["src/*.h"]),
     copts = [
         # max optimizations
         "-O3",
@@ -44,6 +31,25 @@ cc_library(
     deps = [
         "//slog_cc",
         "//slog_cc/buffer:buffer_cc",
+    ],
+)
+
+cc_library(
+    name = "analysis_tools",
+    hdrs = [
+        "//analysis_tools/tracing:slog_trace_subscriber.h",
+    ],
+    copts = [
+        # max optimizations
+        "-O3",
+    ],
+
+    include_prefix = "analysis_tools",
+    includes = ["analysis_tools"],
+    strip_include_prefix = "analysis_tools",
+    deps = [
+        "//analysis_tools",
+        "@slog//:slog_cc",
     ],
 )
 
