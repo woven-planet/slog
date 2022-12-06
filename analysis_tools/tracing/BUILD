@@ -9,6 +9,6 @@ cc_binary(
     linkopts = ["-lpthread"],
     deps = [
         ":slog_trace_subscriber",
-        "//:slog_cc",
+        ":slog_cc",
     ],
 )

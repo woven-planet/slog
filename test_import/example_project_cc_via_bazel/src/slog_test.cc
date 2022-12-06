@@ -15,7 +15,7 @@
 #include <gtest/gtest.h>
 #include <slog_cc/buffer/buffer.h>
 #include <slog_cc/slog.h>
-#include <analysis_tools/tracing:slog_trace_subsriber.h>
+#include <analysis_tools/tracing/slog_trace_subsriber.h>
 
 
 TEST(SlogTest, basic) {

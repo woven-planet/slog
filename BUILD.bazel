@@ -6,7 +6,7 @@ package(default_visibility = ["//visibility:public"])
 # `#include <slog_cc/context/context.h>`
 cc_library(
     name = "slog_cc",
-    hdrs = glob(["src/*.h"]),
+    hdrs = glob(["*.h"]),
     copts = [
         # max optimizations
         "-O3",
