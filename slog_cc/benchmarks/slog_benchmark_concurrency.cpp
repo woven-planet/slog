@@ -14,6 +14,8 @@
 
 #include "slog_cc/slog.h"
 
+#include <limits>
+
 #include <benchmark/benchmark.h>
 
 // clang-format off
