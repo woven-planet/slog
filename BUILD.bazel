@@ -8,6 +8,7 @@ cc_library(
     name = "slog_cc",
     hdrs = [
         # TODO(vsbus): find a right way to add all hdrs here automatically
+        "//slog_cc/analysis_tools/tracing:slog_trace_subscriber.h",
         "//slog_cc/buffer:buffer.h",
         "//slog_cc/buffer:buffer_data.h",
         "//slog_cc/context:context.h",
