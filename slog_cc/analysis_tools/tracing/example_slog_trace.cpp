@@ -1,4 +1,4 @@
-#include "analysis_tools/tracing/slog_trace_subscriber.h"
+#include "slog_cc/analysis_tools/tracing/slog_trace_subscriber.h"
 #include "slog_cc/context/context.h"
 #include "slog_cc/slog.h"
 

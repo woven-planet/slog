@@ -2,7 +2,7 @@ Slog Tracing tool allows recording slog events in the format of Chrome Tracing E
 
 For usage example see `example_slog_trace` target in the `BUILD` file and implementatin in the `example_slog_trace.cpp`. You can run this example with the following command:
 ```
-bazelisk run analysis_tools/tracing:example_slog_trace
+bazelisk run slog_cc/analysis_tools/tracing:example_slog_trace
 ```
 
 It will write slog tracing events to the `/tmp/slog-trace.json` file.
