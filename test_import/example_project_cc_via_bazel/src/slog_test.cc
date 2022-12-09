@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include <gtest/gtest.h>
+#include <slog_cc/analysis_tools/tracing/slog_trace_subscriber.h>
 #include <slog_cc/buffer/buffer.h>
 #include <slog_cc/slog.h>
 
@@ -41,4 +42,24 @@ TEST(SlogTest, basic) {
     }
   }
   SLOG(INFO) << "no segfaults";
+}
+
+TEST(SlogTest, chrome_tracing_build) {
+  // While slog trace subscriber object exists it will append chrome tracing
+  // records to the provided json file. On destruction it will finalize the
+  // file.
+  auto slog_trace_subscriber =
+      slog::CreateSlogTraceSubscriber("/tmp/slog-trace.json");
+
+  // Actual code with slogs body.
+  {
+    SLOG_SCOPE("foo_scope");
+    {
+      SLOG_SCOPE("bar_scope");
+    }
+  }
+
+  // Need to wait all slog records to be processed to make sure all records were
+  // flushed and written to the slog json file.
+  slog::SlogContext::getInstance()->waitAsyncSubscribers();
 }
