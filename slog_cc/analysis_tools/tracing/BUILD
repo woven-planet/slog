@@ -1,3 +1,8 @@
+package(default_visibility = [
+    "//:__pkg__",
+    "//slog_cc:__subpackages__",
+])
+
 cc_library(
     name = "slog_trace_subscriber",
     hdrs = ["slog_trace_subscriber.h"],
