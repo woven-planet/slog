@@ -6,6 +6,11 @@ package(default_visibility = [
 cc_library(
     name = "slog_trace_subscriber",
     hdrs = ["slog_trace_subscriber.h"],
+    srcs = ["slog_trace_subscriber.cpp"],
+    deps = [
+        "//slog_cc/util:string_util",
+        "//slog_cc/context",
+    ],
 )
 
 cc_binary(

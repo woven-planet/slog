@@ -1,17 +1,48 @@
+// Copyright 2023 Woven Planet Holdings
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#ifndef slog_cc_analysis_tools_tracing_slog_trace_subscriber
+#define slog_cc_analysis_tools_tracing_slog_trace_subscriber
+
 #include <cstring>
+#include <string>
 #include <fstream>
 #include <map>
 #include <memory>
 
-#include "slog_cc/util/string_util.h"
-#include "slog_cc/context/subscribers.h"
 #include "slog_cc/context/context.h"
 
 namespace slog {
 
+struct GlobalScopeId {
+  int32_t thread_id;
+  int64_t scope_id;
+
+  bool operator < (const GlobalScopeId& other) const {
+    if (thread_id != other.thread_id) {
+      return thread_id < other.thread_id;
+    }
+    if (scope_id != other.scope_id) {
+      return scope_id < other.scope_id;
+    }
+    return false;
+  }
+};
+
 struct SlogTraceSubscriberState {
   std::ofstream file;
-  std::map<int64_t, std::string> scope_id_to_name;
+  std::map<GlobalScopeId, std::string> scope_id_to_name;
   int64_t min_ts_ns = -1;
 
   ~SlogTraceSubscriberState() { file << "\n]}\n"; }
@@ -22,50 +53,8 @@ struct SlogTraceSubscriber {
   SlogSubscriber slog_subscriber;
 };
 
-SlogTraceSubscriber CreateSlogTraceSubscriber(
-    const std::string& slog_trace_json_filepath) {
-  auto state = std::make_shared<SlogTraceSubscriberState>();
-
-  state->file.open(slog_trace_json_filepath, std::ios::out | std::ios::trunc);
-  state->file << "{\"traceEvents\": [\n";
-
-  auto json_writer_subscriber =
-      slog::SlogContext::getInstance()->createAsyncSubscriber(
-          [state](const SlogRecord& r) {
-            if (state->min_ts_ns == -1) {
-              state->min_ts_ns = r.time().global_ns;
-            } else {
-              state->file << ",\n";
-            }
-
-            std::string json_event;
-
-            const SlogTag* scope_id_tag = r.find_tag(".scope_id");
-            if (scope_id_tag) {
-              const int64_t scope_id = scope_id_tag->valueInt();
-              if (r.find_tag(".scope_open")) {
-                state->scope_id_to_name[scope_id] =
-                    r.find_tag(".scope_name")->valueString();
-              }
-              json_event = util::stringPrintf(
-                  "{\"name\": \"%s\", \"ph\": \"%c\", \"ts\": %lf, \"pid\": "
-                  "\"0\"}",
-                  state->scope_id_to_name[scope_id].c_str(),
-                  r.find_tag(".scope_open") ? 'B' : 'E',
-                  (r.time().global_ns - state->min_ts_ns) / 1e3);
-            } else {
-              const SlogCallSite call_site =
-                  SlogContext::getInstance()->getCallSite(r.call_site_id());
-              json_event = util::stringPrintf(
-                  "{\"name\": \"%s\", \"ph\": \"%c\", \"ts\": %lf, \"pid\": "
-                  "\"0\", \"s\": \"g\"}",
-                  SlogPrinter().stderrLine(r, call_site).c_str(), 'i',
-                  (r.time().global_ns - state->min_ts_ns) / 1e3);
-            }
-            state->file << "  " << json_event;
-          });
-
-  return SlogTraceSubscriber{state, json_writer_subscriber};
-}
+SlogTraceSubscriber CreateSlogTraceSubscriber(const std::string& slog_trace_json_filepath);
 
 }  // namespace slog
+
+#endif
