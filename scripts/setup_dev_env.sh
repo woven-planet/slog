@@ -6,8 +6,6 @@ sudo apt-get install -y google-perftools libgoogle-perftools-dev
 wget https://github.com/bazelbuild/bazelisk/releases/download/v1.11.0/bazelisk-linux-amd64
 chmod +x bazelisk-linux-amd64
 sudo mv bazelisk-linux-amd64 /usr/local/bin/bazelisk
-export USE_BAZEL_VERSION=5.4.0
-
 
 # Make `python` pointing to python3.8
 # TODO(vsbus): this path available in CI only! Change script to use py38 from right place in dev machine and in CI.
