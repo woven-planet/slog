@@ -45,6 +45,7 @@ cc_library(
     deps = [
         "//slog_cc",
         "//slog_cc/buffer:buffer_cc",
+        "//slog_cc/analysis_tools/tracing:slog_trace_subscriber",
     ],
 )
 
