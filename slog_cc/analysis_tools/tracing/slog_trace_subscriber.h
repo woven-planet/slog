@@ -25,9 +25,24 @@
 
 namespace slog {
 
+struct GlobalScopeId {
+  int32_t thread_id;
+  int64_t scope_id;
+
+  bool operator < (const GlobalScopeId& other) const {
+    if (thread_id != other.thread_id) {
+      return thread_id < other.thread_id;
+    }
+    if (scope_id != other.scope_id) {
+      return scope_id < other.scope_id;
+    }
+    return false;
+  }
+};
+
 struct SlogTraceSubscriberState {
   std::ofstream file;
-  std::map<int64_t, std::string> scope_id_to_name;
+  std::map<GlobalScopeId, std::string> scope_id_to_name;
   int64_t min_ts_ns = -1;
 
   ~SlogTraceSubscriberState() { file << "\n]}\n"; }

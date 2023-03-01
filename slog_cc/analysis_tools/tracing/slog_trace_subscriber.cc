@@ -27,13 +27,13 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
             if (scope_id_tag) {
               const int64_t scope_id = scope_id_tag->valueInt();
               if (r.find_tag(".scope_open")) {
-                state->scope_id_to_name[scope_id] =
+                state->scope_id_to_name[{r.thread_id(), scope_id}] =
                     r.find_tag(".scope_name")->valueString();
               }
               json_event = util::stringPrintf(
                   "{\"name\": \"%s\", \"ph\": \"%c\", \"ts\": %lf, \"pid\": "
                   "\"0\"}",
-                  state->scope_id_to_name[scope_id].c_str(),
+                  state->scope_id_to_name[{r.thread_id(), scope_id}].c_str(),
                   r.find_tag(".scope_open") ? 'B' : 'E',
                   (r.time().global_ns - state->min_ts_ns) / 1e3);
             } else {
