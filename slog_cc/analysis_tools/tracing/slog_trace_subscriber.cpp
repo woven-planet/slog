@@ -31,19 +31,19 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
                     r.find_tag(".scope_name")->valueString();
               }
               json_event = util::stringPrintf(
-                  "{\"name\": \"%s\", \"ph\": \"%c\", \"ts\": %lf, \"pid\": "
-                  "\"0\"}",
+                  R"raw({"name": "%s", "ph": "%c", "ts": %lf, "pid": "0", "tid": "%d"}")raw",
                   state->scope_id_to_name[{r.thread_id(), scope_id}].c_str(),
                   r.find_tag(".scope_open") ? 'B' : 'E',
-                  (r.time().global_ns - state->min_ts_ns) / 1e3);
+                  (r.time().global_ns - state->min_ts_ns) / 1e3,
+                  r.thread_id());
             } else {
               const SlogCallSite call_site =
                   SlogContext::getInstance()->getCallSite(r.call_site_id());
               json_event = util::stringPrintf(
-                  "{\"name\": \"%s\", \"ph\": \"%c\", \"ts\": %lf, \"pid\": "
-                  "\"0\", \"s\": \"g\"}",
+                  R"raw({"name": "%s", "ph": "%c", "ts": %lf, "pid": "0", "tid": "%d", "s": "g"}")raw",
                   SlogPrinter().stderrLine(r, call_site).c_str(), 'i',
-                  (r.time().global_ns - state->min_ts_ns) / 1e3);
+                  (r.time().global_ns - state->min_ts_ns) / 1e3,
+                  r.thread_id());
             }
             state->file << "  " << json_event;
           });
