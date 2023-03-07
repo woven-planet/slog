@@ -148,13 +148,12 @@ class SlogPrinter::Impl {
     const auto now = [&r] {
       switch (r.time().global_clock_type_id) {
         case SlogGlobalClockTypeId::kWallTimeClock:
-          return std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>(
+          return std::chrono::system_clock::time_point(
               std::chrono::nanoseconds(r.time().global_ns));
         case SlogGlobalClockTypeId::kGpsEpochClock:
           // TODO(vsbus): implement gps-unix-ts-conversion to avoid calling
           // clock one more time here.
-          return std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>(
-              std::chrono::system_clock::now());
+          return std::chrono::system_clock::now();
       }
       SLOG_ASSERT(0 && "This line is supposed to be unreachable code.");
     }();
