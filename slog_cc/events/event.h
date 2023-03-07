@@ -15,14 +15,12 @@
 #ifndef slog_cc_events_event
 #define slog_cc_events_event
 
-#include <sys/syscall.h>
-#include <unistd.h>
-
 #include "slog_cc/context/context.h"
 #include "slog_cc/primitives/record.h"
 #include "slog_cc/primitives/tag.h"
 #include "slog_cc/util/inline_macro.h"
 #include "slog_cc/util/string_util.h"
+#include "slog_cc/util/os/thread_id.h"
 
 namespace slog {
 
@@ -37,7 +35,7 @@ class SlogEvent {
   SLOG_INLINE SlogEvent(const int8_t severity, const int32_t call_site_id = 0)
       : record_(
             [] {
-              thread_local int32_t thread_id = syscall(SYS_gettid);
+              thread_local int32_t thread_id = util::os::get_thread_id();
               return thread_id;
             }(),
             call_site_id, severity) {}

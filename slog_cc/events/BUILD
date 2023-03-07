@@ -20,6 +20,7 @@ cc_library(
         "//slog_cc/context",
         "//slog_cc/primitives:primitives_cc",
         "//slog_cc/util",
+        "//slog_cc/util/os:thread_id",
         "//slog_cc/util:string_util",
     ],
 )
