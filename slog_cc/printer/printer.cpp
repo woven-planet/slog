@@ -135,7 +135,7 @@ class SlogPrinter::Impl {
                                int minute, double second, int thread_id,
                                const std::string& file_name, int lineno,
                                const std::string& msg) {
-    constexpr char severities[] = "IWEF";
+    constexpr char severities[] = "UDIWEF";
     return util::stringPrintf("%c%02d%02d %02d:%02d:%09.6lf %d %s:%d] %s",
                               severities[severity], month, day, hour, minute,
                               second, thread_id, file_name.c_str(), lineno,

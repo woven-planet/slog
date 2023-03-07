@@ -150,7 +150,7 @@ TEST(SlogPrinterTest, jsonStringRecord) {
   const int32_t kCallSiteId = 73;
   SlogRecord slog_record(kThreadId, kCallSiteId, INFO);
   EXPECT_EQ(
-      R"raw({"thread_id": "42", "call_site_id": "73", "severity": "0", "time": {"elapsed_ns": "-1", "global_ns": "-1"}, "tags": []})raw",
+      R"raw({"thread_id": "42", "call_site_id": "73", "severity": "2", "time": {"elapsed_ns": "-1", "global_ns": "-1"}, "tags": []})raw",
       SlogPrinter().jsonString(slog_record));
 
   slog_record.addTag("just_key");
@@ -158,7 +158,7 @@ TEST(SlogPrinterTest, jsonStringRecord) {
   slog_record.addTag("int-key", 123);
   slog_record.addTag("double-key", 12.3);
   EXPECT_EQ(
-      R"raw({"thread_id": "42", "call_site_id": "73", "severity": "0", "time": )raw"
+      R"raw({"thread_id": "42", "call_site_id": "73", "severity": "2", "time": )raw"
       R"raw({"elapsed_ns": "-1", "global_ns": "-1"}, "tags": [{"key": "just_key", )raw"
       R"raw("verbosity": "1", "valueType": "0"}, {"key": "string-key", "verbosity": )raw"
       R"raw("1", "valueType": "1", "valueString": "foo"}, {"key": "int-key", )raw"
