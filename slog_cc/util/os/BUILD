@@ -6,7 +6,5 @@ cc_library(
         "@platforms//os:qnx": ["impl_qnx/thread_id.cc"],
         "//conditions:default": ["impl_ubuntu/thread_id.cc"],
     }),
-    hdrs = [
-        "thread_id.h",
-    ],
+    hdrs = ["thread_id.h"],
 )

@@ -19,8 +19,8 @@
 #include "slog_cc/primitives/record.h"
 #include "slog_cc/primitives/tag.h"
 #include "slog_cc/util/inline_macro.h"
-#include "slog_cc/util/string_util.h"
 #include "slog_cc/util/os/thread_id.h"
+#include "slog_cc/util/string_util.h"
 
 namespace slog {
 
