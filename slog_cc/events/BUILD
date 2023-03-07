@@ -21,5 +21,6 @@ cc_library(
         "//slog_cc/primitives:primitives_cc",
         "//slog_cc/util",
         "//slog_cc/util:string_util",
+        "//slog_cc/util/os:thread_id",
     ],
 )

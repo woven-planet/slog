@@ -148,9 +148,9 @@ class SlogPrinter::Impl {
     const auto now = [&r] {
       switch (r.time().global_clock_type_id) {
         case SlogGlobalClockTypeId::kWallTimeClock:
-          return std::chrono::time_point<std::chrono::system_clock,
-                                         std::chrono::nanoseconds>(
-              std::chrono::nanoseconds(r.time().global_ns));
+          return std::chrono::system_clock::time_point(
+              std::chrono::duration_cast<std::chrono::system_clock::duration>(
+                  std::chrono::nanoseconds(r.time().global_ns)));
         case SlogGlobalClockTypeId::kGpsEpochClock:
           // TODO(vsbus): implement gps-unix-ts-conversion to avoid calling
           // clock one more time here.
@@ -319,11 +319,11 @@ class SlogPrinter::Impl {
              std::to_string(r.time().global_ns % 1000000000)};
        }},
       {"file", 32,
-       [](const SlogRecord& r, const SlogCallSite& call_site) {
+       [](const SlogRecord&, const SlogCallSite& call_site) {
          return std::vector<std::string>{call_site.file()};
        }},
       {"line", 4,
-       [](const SlogRecord& r, const SlogCallSite& call_site) {
+       [](const SlogRecord&, const SlogCallSite& call_site) {
          return std::vector<std::string>{std::to_string(call_site.line())};
        }},
       {"tag.key", 24,
