@@ -12,7 +12,7 @@
 #         "@com_github_google_benchmark//:benchmark",
 #     ],
 # )
-# 
+#
 # cc_binary(
 #     name = "slog_benchmark",
 #     srcs = ["slog_benchmark.cpp"],
@@ -35,7 +35,7 @@
 #         "@com_github_google_glog//:glog",
 #     ],
 # )
-# 
+#
 # # TODO(vsbus): fix benchmark
 # cc_test(
 #     name = "slog_benchmark_concurrency",
@@ -46,7 +46,7 @@
 #         "@com_github_google_googletest//:gtest_main",
 #     ],
 # )
-# 
+#
 # cc_binary(
 #     name = "slog_concurrency_stress_test",
 #     srcs = ["slog_concurrency_stress_test.cpp"],

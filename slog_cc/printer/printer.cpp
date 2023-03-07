@@ -149,7 +149,8 @@ class SlogPrinter::Impl {
       switch (r.time().global_clock_type_id) {
         case SlogGlobalClockTypeId::kWallTimeClock:
           return std::chrono::system_clock::time_point(
-              std::chrono::nanoseconds(r.time().global_ns));
+              std::chrono::duration_cast<std::chrono::system_clock::duration>(
+                  std::chrono::nanoseconds(r.time().global_ns)));
         case SlogGlobalClockTypeId::kGpsEpochClock:
           // TODO(vsbus): implement gps-unix-ts-conversion to avoid calling
           // clock one more time here.

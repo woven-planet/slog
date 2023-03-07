@@ -44,8 +44,8 @@ cc_library(
     strip_include_prefix = "slog_cc",
     deps = [
         "//slog_cc",
-        "//slog_cc/buffer:buffer_cc",
         "//slog_cc/analysis_tools/tracing:slog_trace_subscriber",
+        "//slog_cc/buffer:buffer_cc",
     ],
 )
 
@@ -57,4 +57,3 @@ py_library(
     name = "slog_py",
     deps = ["//slog_py"],
 )
-
