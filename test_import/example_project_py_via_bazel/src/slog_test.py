@@ -27,7 +27,7 @@ class SlogPyTest(unittest.TestCase):
             records = slog_buffer.flush().records
 
             self.assertEqual(1, len(records))
-            self.assertEqual(0, int(json.loads(str(records[0]))['severity']))
+            self.assertEqual(2, int(json.loads(str(records[0]))['severity']))
             self.assertEqual('Hello World', json.loads(
                 str(records[0]))['tags'][0]['valueString'])
 
