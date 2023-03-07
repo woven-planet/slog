@@ -28,6 +28,6 @@ struct assert_size_SlogTag {
                 "performance, please run "
                 "slog_benchmark before committing this change to master.");
 };
-assert_size_SlogTag<80, sizeof(SlogTag)> do_assert_size_SlogTag;
+assert_size_SlogTag<2 * sizeof(std::string) + 16, sizeof(SlogTag)> do_assert_size_SlogTag;
 
 }  // namespace slog
