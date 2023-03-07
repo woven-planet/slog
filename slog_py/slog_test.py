@@ -36,9 +36,9 @@ class SlogPyTest(unittest.TestCase):
             records = slog_buffer.flush().records
 
             self.assertEqual(3, len(records))
-            self.assertEqual(0, int(json.loads(str(records[0]))['severity']))
-            self.assertEqual(1, int(json.loads(str(records[1]))['severity']))
-            self.assertEqual(2, int(json.loads(str(records[2]))['severity']))
+            self.assertEqual(2, int(json.loads(str(records[0]))['severity']))
+            self.assertEqual(3, int(json.loads(str(records[1]))['severity']))
+            self.assertEqual(4, int(json.loads(str(records[2]))['severity']))
 
     def test_silent_noisy(self):
         with SlogBuffer(slog.SlogContext.get_instance()) as slog_buffer:

@@ -25,10 +25,12 @@
 
 namespace slog {
 
-constexpr int8_t INFO = 0;
-constexpr int8_t WARNING = 1;
-constexpr int8_t ERROR = 2;
-constexpr int8_t FATAL = 3;
+constexpr int8_t UNKNOWN = 0;
+constexpr int8_t DEBUG = 1;
+constexpr int8_t INFO = 2;
+constexpr int8_t WARNING = 3;
+constexpr int8_t ERROR = 4;
+constexpr int8_t FATAL = 5;
 
 // TODO(vsbus): now having slog namespace, does it worth removing Slog prefix
 // everywhere to avoid slog::SlogFoo repititions?
