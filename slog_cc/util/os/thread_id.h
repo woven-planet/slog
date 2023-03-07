@@ -1,5 +1,5 @@
 #ifndef slog_cc_util_os_thread_id
-#define slog_cc_util_od_thread_id
+#define slog_cc_util_os_thread_id
 
 #include <cstdint>
 
