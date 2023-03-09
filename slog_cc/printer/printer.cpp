@@ -183,9 +183,6 @@ class SlogPrinter::Impl {
     // TODO(vsbus): make emitStderr thread-safe by adding locks around printing
     // the line.
     std::cerr << stderrLine(r, cs) << std::endl;
-    if (r.severity() == FATAL) {
-      abort();
-    }
   }
 
   std::string renderLine(const Line& line) {

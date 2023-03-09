@@ -43,6 +43,9 @@ class SlogContextSubscribers {
     for (const auto& callback : *callbacks_) {
       (*callback)(record);
     }
+    if (record.severity() == FATAL) {
+      abort();
+    }
   }
 
  private:
