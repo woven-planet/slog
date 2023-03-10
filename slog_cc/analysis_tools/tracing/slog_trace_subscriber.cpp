@@ -37,13 +37,14 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
                   (r.time().global_ns - state->min_ts_ns) / 1e3,
                   r.thread_id());
             } else {
-              const SlogCallSite call_site =
-                  SlogContext::getInstance()->getCallSite(r.call_site_id());
-              json_event = util::stringPrintf(
-                  R"raw({"name": "%s", "ph": "%c", "ts": %lf, "pid": "0", "tid": "%d", "s": "g"})raw",
-                  SlogPrinter().stderrLine(r, call_site).c_str(), 'i',
-                  (r.time().global_ns - state->min_ts_ns) / 1e3,
-                  r.thread_id());
+              // TODO(viktor): Below code doesn't print all tags ATM, find a better solution.
+              // const SlogCallSite call_site =
+              //     SlogContext::getInstance()->getCallSite(r.call_site_id());
+              // json_event = util::stringPrintf(
+              //     R"raw({"name": "%s", "ph": "%c", "ts": %lf, "pid": "0", "tid": "%d", "s": "g"})raw",
+              //     SlogPrinter().stderrLine(r, call_site).c_str(), 'i',
+              //     (r.time().global_ns - state->min_ts_ns) / 1e3,
+              //     r.thread_id());
             }
             state->file << "  " << json_event;
           });
