@@ -15,6 +15,12 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
   auto json_writer_subscriber =
       slog::SlogContext::getInstance()->createAsyncSubscriber(
           [state](const SlogRecord& r) {
+            // TODO(viktor): Below code doesn't print all tags for a regular event. Implement
+            // better handling and remove skip check.
+            if (r.find_tag(".scope_id") == nullptr) {
+              return;
+            }
+            
             if (state->min_ts_ns == -1) {
               state->min_ts_ns = r.time().global_ns;
             } else {
