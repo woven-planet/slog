@@ -16,10 +16,10 @@
 #define slog_cc_analysis_tools_tracing_slog_trace_subscriber
 
 #include <cstring>
-#include <string>
 #include <fstream>
 #include <map>
 #include <memory>
+#include <string>
 
 #include "slog_cc/context/context.h"
 
@@ -29,7 +29,7 @@ struct GlobalScopeId {
   int32_t thread_id;
   int64_t scope_id;
 
-  bool operator < (const GlobalScopeId& other) const {
+  bool operator<(const GlobalScopeId& other) const {
     if (thread_id != other.thread_id) {
       return thread_id < other.thread_id;
     }
@@ -53,7 +53,8 @@ struct SlogTraceSubscriber {
   SlogSubscriber slog_subscriber;
 };
 
-SlogTraceSubscriber CreateSlogTraceSubscriber(const std::string& slog_trace_json_filepath);
+SlogTraceSubscriber CreateSlogTraceSubscriber(
+    const std::string& slog_trace_json_filepath);
 
 }  // namespace slog
 

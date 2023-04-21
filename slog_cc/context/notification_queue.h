@@ -38,7 +38,7 @@ class SlogAsyncNotificationQueue {
   // background thread, e.g. it could set the thread name.
   SlogAsyncNotificationQueue(
       const std::function<void(const SlogRecord&)>& notify,
-      const std::function<void()>& thread_init);
+      const std::function<void()>& thread_init, size_t buffer_size);
 
   ~SlogAsyncNotificationQueue();
 
@@ -46,14 +46,14 @@ class SlogAsyncNotificationQueue {
     std::unique_lock<std::mutex> lock(mu_);
     buffer_.emplace_back(std::move(record));
     num_records_added_ += 1;
-    // buffer_ was pre-allocated for kBufferSize elements. When buffer size is
-    // approaching kBufferSize it is a good time to notify flush thread to
+    // buffer_ was pre-allocated for buffer_size_ elements. When buffer size is
+    // approaching buffer_size_ it is a good time to notify flush thread to
     // process the buffer. Benchmarks showed that we need to do it before we
-    // get kBufferSize messages in the buffer but not too early. kBufferSize/2
+    // get buffer_size_ messages in the buffer but not too early. buffer_size_/2
     // appeared a good value providing good benchmarks. Maybe the best value is
     // a bit bigger or smaller but small changes of this parameter don't provide
     // visible benchmark improvements.
-    if (buffer_.size() % (kBufferSize / 2) == 0) {
+    if (buffer_.size() % (buffer_size_ / 2) == 0) {
       cv_batch_ready_.notify_all();
     }
   }
@@ -68,7 +68,7 @@ class SlogAsyncNotificationQueue {
   }
 
  private:
-  static constexpr size_t kBufferSize = 8192;
+  const size_t buffer_size_;
 
   std::mutex mu_;
 

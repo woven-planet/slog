@@ -60,13 +60,14 @@ class SlogContext {
     async_notification_queue_.get()->waitRecordsFlush();
   }
 
-  void resetAsyncNotificationQueue(const std::function<void()>& thread_init =
-                                       [] {}) {
+  void resetAsyncNotificationQueue(
+      const std::function<void()>& thread_init = [] {},
+      size_t buffer_size = kDefaultAsyncBufferSize) {
     std::unique_lock<std::shared_timed_mutex> lock(
         async_notification_queue_mutex_);
     async_notification_queue_.reset(new SlogAsyncNotificationQueue(
         [this](const SlogRecord& record) { async_subscribers_.notify(record); },
-        thread_init));
+        thread_init, buffer_size));
   }
 
   SLOG_INLINE size_t numCallSites() {
@@ -114,6 +115,8 @@ class SlogContext {
   static const std::function<SlogTimestamps()> kDefaultGetTimestampsFunc;
 
  private:
+  static constexpr size_t kDefaultAsyncBufferSize = 8192;
+
   SlogContext();
 
   // Thread unsafe implementation of add-call-site logic as a private method as

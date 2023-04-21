@@ -23,17 +23,18 @@ const std::chrono::milliseconds kSleepBetweenFlushes(1000);
 
 SlogAsyncNotificationQueue::SlogAsyncNotificationQueue(
     const std::function<void(const SlogRecord&)>& notify,
-    const std::function<void()>& thread_init) {
+    const std::function<void()>& thread_init, size_t buffer_size)
+    : buffer_size_(buffer_size) {
   // Reserve buffer_ before initializing the thread.
   // Still in single threaded mode, no lock is required.
-  buffer_.reserve(kBufferSize);
+  buffer_.reserve(buffer_size);
 
   // The worker thread.
   process_loop_ = std::thread([this, notify, thread_init] {
     thread_init();
 
     std::vector<SlogRecord> batch;
-    batch.reserve(kBufferSize);
+    batch.reserve(buffer_size_);
     auto last_check_time = std::chrono::steady_clock::now();
     while (true) {
       {
