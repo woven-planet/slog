@@ -7,9 +7,7 @@ namespace slog {
 namespace util {
 namespace os {
 
-int32_t get_thread_id() {
-  return syscall(SYS_gettid);
-}
+int32_t get_thread_id() { return syscall(SYS_gettid); }
 
 }  // namespace os
 }  // namespace util

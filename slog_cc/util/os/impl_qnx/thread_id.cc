@@ -6,9 +6,7 @@ namespace slog {
 namespace util {
 namespace os {
 
-int32_t get_thread_id() {
-  return gettid();
-}
+int32_t get_thread_id() { return gettid(); }
 
 }  // namespace os
 }  // namespace util

@@ -54,9 +54,7 @@ TEST(SlogTest, chrome_tracing_build) {
   // Actual code with slogs body.
   {
     SLOG_SCOPE("foo_scope");
-    {
-      SLOG_SCOPE("bar_scope");
-    }
+    { SLOG_SCOPE("bar_scope"); }
   }
 
   // Need to wait all slog records to be processed to make sure all records were

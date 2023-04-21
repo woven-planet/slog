@@ -23,8 +23,8 @@ const std::chrono::milliseconds kSleepBetweenFlushes(1000);
 
 SlogAsyncNotificationQueue::SlogAsyncNotificationQueue(
     const std::function<void(const SlogRecord&)>& notify,
-    const std::function<void()>& thread_init,
-    size_t buffer_size) : buffer_size_(buffer_size) {
+    const std::function<void()>& thread_init, size_t buffer_size)
+    : buffer_size_(buffer_size) {
   // Reserve buffer_ before initializing the thread.
   // Still in single threaded mode, no lock is required.
   buffer_.reserve(buffer_size);

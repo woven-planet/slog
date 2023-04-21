@@ -38,8 +38,7 @@ class SlogAsyncNotificationQueue {
   // background thread, e.g. it could set the thread name.
   SlogAsyncNotificationQueue(
       const std::function<void(const SlogRecord&)>& notify,
-      const std::function<void()>& thread_init,
-      size_t buffer_size);
+      const std::function<void()>& thread_init, size_t buffer_size);
 
   ~SlogAsyncNotificationQueue();
 

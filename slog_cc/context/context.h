@@ -67,8 +67,7 @@ class SlogContext {
         async_notification_queue_mutex_);
     async_notification_queue_.reset(new SlogAsyncNotificationQueue(
         [this](const SlogRecord& record) { async_subscribers_.notify(record); },
-        thread_init,
-        buffer_size));
+        thread_init, buffer_size));
   }
 
   SLOG_INLINE size_t numCallSites() {
