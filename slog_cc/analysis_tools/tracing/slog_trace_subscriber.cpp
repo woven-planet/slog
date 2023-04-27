@@ -1,8 +1,8 @@
 #include "slog_trace_subscriber.h"
 
 #include "slog_cc/context/subscribers.h"
-#include "slog_cc/util/string_util.h"
 #include "slog_cc/events/scope.h"
+#include "slog_cc/util/string_util.h"
 
 namespace slog {
 
@@ -34,8 +34,7 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
         if (trace_thread_name) {
           const std::string json_event = util::stringPrintf(
               R"raw({"name": "thread_name", "ph": "M", "pid": "0", "tid": "%d", "args": {"name" : "%s"}})raw",
-              r.thread_id(),
-              trace_thread_name->valueString().c_str());
+              r.thread_id(), trace_thread_name->valueString().c_str());
           state->file << "  " << json_event << ",\n";
         }
 
@@ -52,18 +51,25 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
           str_tags.push_back([&tag]() -> std::string {
             switch (tag.valueType()) {
               case SlogTagValueType::kString:
-                return util::stringPrintf(R"raw("%s": "%s")raw",
-                                          tag.key().c_str(),
-                                          tag.valueString().c_str());
+                return util::stringPrintf(
+                    R"raw("%s": "%s")raw",
+                    util::escapeIvalidJsonCharacters(tag.key()).c_str(),
+                    util::escapeIvalidJsonCharacters(tag.valueString())
+                        .c_str());
               case SlogTagValueType::kDouble:
-                return util::stringPrintf(R"raw("%s": %lf)raw",
-                                          tag.key().c_str(), tag.valueDouble());
+                return util::stringPrintf(
+                    R"raw("%s": %lf)raw",
+                    util::escapeIvalidJsonCharacters(tag.key()).c_str(),
+                    tag.valueDouble());
               case SlogTagValueType::kInt:
-                return util::stringPrintf(R"raw("%s": "%d")raw",
-                                          tag.key().c_str(), tag.valueInt());
+                return util::stringPrintf(
+                    R"raw("%s": "%d")raw",
+                    util::escapeIvalidJsonCharacters(tag.key()).c_str(),
+                    tag.valueInt());
               case SlogTagValueType::kNone:
-                return util::stringPrintf(R"raw("%s": "")raw",
-                                          tag.key().c_str());
+                return util::stringPrintf(
+                    R"raw("%s": "")raw",
+                    util::escapeIvalidJsonCharacters(tag.key()).c_str());
             }
             SLOG_ASSERT(false && "Unreachable code hit.");
           }());
@@ -116,7 +122,10 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
               R"raw({"name": "%s", "ph": "%c", "ts": %lf, "pid": "0", "tid": "%d", "s": "t", "cat": "%s", "args": {"log_msg": "%s", "tags": {%s}}})raw",
               severity.c_str(), 'i',
               (r.time().global_ns - state->min_ts_ns) / 1e3, r.thread_id(),
-              severity.c_str(), SlogPrinter().stderrLine(r, call_site).c_str(),
+              severity.c_str(),
+              util::escapeIvalidJsonCharacters(
+                  SlogPrinter().stderrLine(r, call_site))
+                  .c_str(),
               util::join(str_tags, ", ").c_str());
         }
         state->file << "  " << json_event;

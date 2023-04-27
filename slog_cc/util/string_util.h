@@ -62,6 +62,8 @@ std::string stringPrintf(const char* format, ...);
 
 bool startsWith(const std::string& str, const std::string& prefix);
 
+std::string escapeIvalidJsonCharacters(const std::string& str);
+
 }  // namespace util
 }  // end namespace slog
 

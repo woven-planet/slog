@@ -9,8 +9,8 @@ cc_library(
     hdrs = ["slog_trace_subscriber.h"],
     deps = [
         "//slog_cc/context",
-        "//slog_cc/util:string_util",
         "//slog_cc/events:events_cc",
+        "//slog_cc/util:string_util",
     ],
 )
 
