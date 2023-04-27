@@ -60,7 +60,8 @@ bool startsWith(const std::string& str, const std::string& prefix) {
 }
 
 std::string escapeIvalidJsonCharacters(const std::string& str) {
-  constexpr char reserved_characters[] = {'\b', '\f', '\n', '\r', '\t', '\"', '\\', 0};
+  constexpr char reserved_characters[] = {'\b', '\f', '\n', '\r',
+                                          '\t', '\"', '\\', 0};
   constexpr char escape_characters[] = {'b', 'f', 'n', 'r', 't', '\"', '\\', 0};
   std::string result;
   for (const int ch : str) {
