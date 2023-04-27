@@ -2,7 +2,6 @@
 
 #include "slog_cc/context/subscribers.h"
 #include "slog_cc/util/string_util.h"
-#include "slog_cc/util/os/thread_id.h"
 
 namespace slog {
 
@@ -30,31 +29,29 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
 
         std::vector<std::string> str_tags;
         for (const SlogTag& tag : r.tags()) {
-          // TODO(viktor): it would be better to check starts_with(".scope")
-          if (tag.key().size() < 1 || tag.key().at(0) == '.') {
-            // Hide tags with empty key and tags starting with period character.
+          if (tag.key().empty()) {
+            // Skip tags with empty key.
             continue;
           }
-          str_tags.push_back(util::stringPrintf(
-            "\"%s\": %s",
-            tag.key().c_str(),
-            [&tag] () -> std::string {
-              switch (tag.valueType()) {
-                case SlogTagValueType::kString:
-                  return "\"" + tag.valueString() + "\"";
-                case SlogTagValueType::kDouble:
-                  return std::to_string(tag.valueDouble());
-                case SlogTagValueType::kInt:
-                  return "\"" + std::to_string(tag.valueInt()) + "\"";
-                case SlogTagValueType::kNone:
-                  return "\"kNone\"";
-              }
-            }().c_str()));
+          if (util::startsWith(tag.key(), ".scope")) {
+            // Hide scope internal tags.
+            continue;
+          }
+          str_tags.push_back([&tag] () -> std::string {
+            switch (tag.valueType()) {
+              case SlogTagValueType::kString:
+                return util::stringPrintf(R"raw("%s": "%s")raw", tag.key().c_str(), tag.valueString().c_str());
+              case SlogTagValueType::kDouble:
+                return util::stringPrintf(R"raw("%s": %lf)raw", tag.key().c_str(), tag.valueDouble());
+              case SlogTagValueType::kInt:
+                return util::stringPrintf(R"raw("%s": "%d")raw", tag.key().c_str(), tag.valueInt());
+              case SlogTagValueType::kNone:
+                return util::stringPrintf(R"raw("%s": "")raw", tag.key().c_str());
+            }
+          }());
         }
 
         std::string json_event;
-
-        
         if (scope_id_tag) {
           const int64_t scope_id = scope_id_tag->valueInt();
           const bool is_open = r.find_tag(".scope_open");
@@ -78,12 +75,12 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
         } else {
           const std::string severity = [&r] () -> std::string {
             switch (r.severity()) {
-              case UNKNOWN: return "unknown";
-              case DEBUG: return "debug";
-              case INFO: return "info";
-              case WARNING: return "warning";
-              case ERROR: return "error";
-              case FATAL: return "fatal";
+              case UNKNOWN: return "Unknown";
+              case DEBUG: return "Debug";
+              case INFO: return "Info";
+              case WARNING: return "Warning";
+              case ERROR: return "Error";
+              case FATAL: return "Fatal";
               default: return std::to_string(r.severity());
             }
           }();

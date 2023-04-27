@@ -53,5 +53,9 @@ std::string stringPrintf(const char* format, ...) {
   return buffer;
 }
 
+bool startsWith(const std::string& str, const std::string& prefix) {
+  return str.compare(0, prefix.size(), prefix) == 0;
+}
+
 }  // namespace util
 }  // end namespace slog
