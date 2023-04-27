@@ -49,7 +49,7 @@ TEST(SlogTest, chrome_tracing_build) {
   // records to the provided json file. On destruction it will finalize the
   // file.
   auto slog_trace_subscriber =
-      slog::CreateSlogTraceSubscriber("/tmp/slog-trace.json");
+      slog::CreateSlogTraceSubscriber("/tmp/slog-trace.json", slog::SlogTraceConfig::kTrackScopesAndLogs);
 
   // Actual code with slogs body.
   {
