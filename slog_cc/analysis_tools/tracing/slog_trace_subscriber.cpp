@@ -7,34 +7,25 @@
 namespace slog {
 
 SlogTraceSubscriber CreateSlogTraceSubscriber(
-    const std::string& slog_trace_json_filepath) {
+    const std::string& slog_trace_json_filepath,
+    const SlogTraceConfig config) {
   auto state = std::make_shared<SlogTraceSubscriberState>();
 
   state->file.open(slog_trace_json_filepath, std::ios::out | std::ios::trunc);
   state->file << "{\"traceEvents\": [\n";
 
   auto json_writer_subscriber = slog::SlogContext::getInstance()->createAsyncSubscriber(
-      [state](const SlogRecord& r) {
-        // TODO(viktor): Below code doesn't print all tags for a regular event.
-        // Implement better handling and remove skip check.
-        // if (r.find_tag(".scope_id") == nullptr) {
-        //   return;
-        // }
+      [state, config](const SlogRecord& r) {
+        const SlogTag* scope_id_tag = r.find_tag(".scope_id");
+
+        if (config == SlogTraceConfig::kTrackScopesOnly && scope_id_tag == nullptr) {
+          return;
+        }
 
         if (state->min_ts_ns == -1) {
           state->min_ts_ns = r.time().global_ns;
         } else {
           state->file << ",\n";
-        }
-
-        if (state->logged_thread_names.find(r.thread_id()) == state->logged_thread_names.end()) {
-          const std::string thread_name = util::stringPrintf("t%d-%s", r.thread_id(), util::os::get_thread_name(r.thread_id()).c_str());
-          const std::string json_event = util::stringPrintf(
-            R"raw({"name": "thread_name", "ph": "M", "pid": "0", "tid": "%d", "args": {"name" : "%s"}})raw",
-            r.thread_id(),
-            thread_name.c_str());
-          state->file << "  " << json_event << ",\n";
-          state->logged_thread_names.insert(r.thread_id());
         }
 
         std::vector<std::string> str_tags;
@@ -63,7 +54,7 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
 
         std::string json_event;
 
-        const SlogTag* scope_id_tag = r.find_tag(".scope_id");
+        
         if (scope_id_tag) {
           const int64_t scope_id = scope_id_tag->valueInt();
           const bool is_open = r.find_tag(".scope_open");
