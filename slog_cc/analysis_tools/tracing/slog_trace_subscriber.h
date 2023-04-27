@@ -53,8 +53,13 @@ struct SlogTraceSubscriber {
   SlogSubscriber slog_subscriber;
 };
 
+enum class SlogTraceConfig {
+  kTrackScopesOnly,
+  kTrackScopesAndLogs,
+};
+
 SlogTraceSubscriber CreateSlogTraceSubscriber(
-    const std::string& slog_trace_json_filepath);
+    const std::string& slog_trace_json_filepath, const SlogTraceConfig config);
 
 }  // namespace slog
 

@@ -60,6 +60,8 @@ std::vector<std::string> split(const std::string& s, const char delim,
 // (>16K).
 std::string stringPrintf(const char* format, ...);
 
+bool startsWith(const std::string& str, const std::string& prefix);
+
 }  // namespace util
 }  // end namespace slog
 
