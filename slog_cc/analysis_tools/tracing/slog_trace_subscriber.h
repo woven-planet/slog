@@ -58,6 +58,8 @@ enum class SlogTraceConfig {
   kTrackScopesAndLogs,
 };
 
+constexpr char kSlogTagTraceThreadName[] = ".trace_thread_name";
+
 SlogTraceSubscriber CreateSlogTraceSubscriber(
     const std::string& slog_trace_json_filepath, const SlogTraceConfig config);
 

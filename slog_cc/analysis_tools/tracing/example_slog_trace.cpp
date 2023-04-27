@@ -20,6 +20,8 @@ int main() {
 
   // Actual code with slogs body.
   {
+    SLOG(INFO).addTag(slog::kSlogTagTraceThreadName, "example-t");
+
     SLOG_SCOPE("Whole test scope");
     constexpr int kNumIterations = 4;
     for (int i = 0; i < kNumIterations; ++i) {
