@@ -10,6 +10,7 @@ cc_library(
     deps = [
         "//slog_cc/context",
         "//slog_cc/util:string_util",
+        "//slog_cc/util/os:thread_id",
     ],
 )
 

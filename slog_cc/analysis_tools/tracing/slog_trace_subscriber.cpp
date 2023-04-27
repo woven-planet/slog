@@ -2,6 +2,7 @@
 
 #include "slog_cc/context/subscribers.h"
 #include "slog_cc/util/string_util.h"
+#include "slog_cc/util/os/thread_id.h"
 
 namespace slog {
 
@@ -12,10 +13,8 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
   state->file.open(slog_trace_json_filepath, std::ios::out | std::ios::trunc);
   state->file << "{\"traceEvents\": [\n";
 
-  auto json_writer_subscriber =
-      slog::SlogContext::getInstance()->createAsyncSubscriber([state](
-                                                                  const SlogRecord&
-                                                                      r) {
+  auto json_writer_subscriber = slog::SlogContext::getInstance()->createAsyncSubscriber(
+      [state](const SlogRecord& r) {
         // TODO(viktor): Below code doesn't print all tags for a regular event.
         // Implement better handling and remove skip check.
         // if (r.find_tag(".scope_id") == nullptr) {
@@ -28,8 +27,19 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
           state->file << ",\n";
         }
 
+        if (state->logged_thread_names.find(r.thread_id()) == state->logged_thread_names.end()) {
+          const std::string thread_name = util::stringPrintf("t%d-%s", r.thread_id(), util::os::get_thread_name(r.thread_id()).c_str());
+          const std::string json_event = util::stringPrintf(
+            R"raw({"name": "thread_name", "ph": "M", "pid": "0", "tid": "%d", "args": {"name" : "%s"}})raw",
+            r.thread_id(),
+            thread_name.c_str());
+          state->file << "  " << json_event << ",\n";
+          state->logged_thread_names.insert(r.thread_id());
+        }
+
         std::vector<std::string> str_tags;
         for (const SlogTag& tag : r.tags()) {
+          // TODO(viktor): it would be better to check starts_with(".scope")
           if (tag.key().size() < 1 || tag.key().at(0) == '.') {
             // Hide tags with empty key and tags starting with period character.
             continue;
@@ -89,7 +99,6 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
           const SlogCallSite call_site =
               SlogContext::getInstance()->getCallSite(r.call_site_id());
           json_event = util::stringPrintf(
-              // TODO(viktor): log -> info/warn/etc.
               R"raw({"name": "%s", "ph": "%c", "ts": %lf, "pid": "0", "tid": "%d", "s": "t", "cat": "%s", "args": {"log_msg": "%s", "tags": {%s}}})raw",
               severity.c_str(), 'i',
               (r.time().global_ns - state->min_ts_ns) / 1e3, r.thread_id(),
