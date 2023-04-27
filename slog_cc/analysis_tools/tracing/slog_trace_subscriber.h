@@ -19,7 +19,6 @@
 #include <fstream>
 #include <map>
 #include <memory>
-#include <set>
 #include <string>
 
 #include "slog_cc/context/context.h"
@@ -44,7 +43,6 @@ struct GlobalScopeId {
 struct SlogTraceSubscriberState {
   std::ofstream file;
   std::map<GlobalScopeId, std::string> scope_id_to_name;
-  std::set<int32_t> logged_thread_names;
   int64_t min_ts_ns = -1;
 
   ~SlogTraceSubscriberState() { file << "\n]}\n"; }
