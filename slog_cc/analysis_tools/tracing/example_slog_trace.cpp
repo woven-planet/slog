@@ -28,7 +28,7 @@ int main() {
       SLOG_SCOPE("iteration-" + std::to_string(i) + "-of-" +
                  std::to_string(kNumIterations));
       const int sleep_us = (i + 1) * 100;
-      SLOG(INFO) << "iteration #" << i << ", sleeping "
+      SLOG(INFO) << "iteration #" << i << "\n  sleeping "
                  << slog::SlogTag("sleep_us", sleep_us) << " microseconds...";
       SLOG_SCOPE("Sleep scope").addTag("sleep_us", sleep_us);
       usleep(sleep_us);
