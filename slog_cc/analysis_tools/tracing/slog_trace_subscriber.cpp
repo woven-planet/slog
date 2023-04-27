@@ -2,6 +2,7 @@
 
 #include "slog_cc/context/subscribers.h"
 #include "slog_cc/util/string_util.h"
+#include "slog_cc/events/scope.h"
 
 namespace slog {
 
@@ -16,7 +17,7 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
       slog::SlogContext::getInstance()->createAsyncSubscriber([state, config](
                                                                   const SlogRecord&
                                                                       r) {
-        const SlogTag* scope_id_tag = r.find_tag(".scope_id");
+        const SlogTag* scope_id_tag = r.find_tag(kSlogTagKeyScopeId);
 
         if (config == SlogTraceConfig::kTrackScopesOnly &&
             scope_id_tag == nullptr) {
@@ -27,6 +28,15 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
           state->min_ts_ns = r.time().global_ns;
         } else {
           state->file << ",\n";
+        }
+
+        const SlogTag* trace_thread_name = r.find_tag(kSlogTagTraceThreadName);
+        if (trace_thread_name) {
+          const std::string json_event = util::stringPrintf(
+              R"raw({"name": "thread_name", "ph": "M", "pid": "0", "tid": "%d", "args": {"name" : "%s"}})raw",
+              r.thread_id(),
+              trace_thread_name->valueString().c_str());
+          state->file << "  " << json_event << ",\n";
         }
 
         std::vector<std::string> str_tags;
@@ -62,10 +72,10 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
         std::string json_event;
         if (scope_id_tag) {
           const int64_t scope_id = scope_id_tag->valueInt();
-          const bool is_open = r.find_tag(".scope_open");
+          const bool is_open = r.find_tag(kSlogTagKeyScopeOpen);
           if (is_open) {
             state->scope_id_to_name[{r.thread_id(), scope_id}] =
-                r.find_tag(".scope_name")->valueString();
+                r.find_tag(kSlogTagKeyScopeName)->valueString();
           }
           const std::string str_args = [&str_tags]() -> std::string {
             if (str_tags.empty()) {
