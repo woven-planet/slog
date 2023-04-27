@@ -55,6 +55,7 @@ SlogTraceSubscriber CreateSlogTraceSubscriber(
                 return util::stringPrintf(R"raw("%s": "")raw",
                                           tag.key().c_str());
             }
+            SLOG_ASSERT(false && "Unreachable code hit.");
           }());
         }
 
