@@ -59,8 +59,7 @@ enum class SlogTraceConfig {
 };
 
 SlogTraceSubscriber CreateSlogTraceSubscriber(
-    const std::string& slog_trace_json_filepath,
-    const SlogTraceConfig config);
+    const std::string& slog_trace_json_filepath, const SlogTraceConfig config);
 
 }  // namespace slog
 

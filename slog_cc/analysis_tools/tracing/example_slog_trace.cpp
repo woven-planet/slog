@@ -15,8 +15,8 @@ int main() {
   // While slog trace subscriber object exists it will append chrome tracing
   // records to the provided json file. On destruction it will finalize the
   // file.
-  auto slog_trace_subscriber =
-      slog::CreateSlogTraceSubscriber("/tmp/slog-trace.json", slog::SlogTraceConfig::kTrackScopesAndLogs);
+  auto slog_trace_subscriber = slog::CreateSlogTraceSubscriber(
+      "/tmp/slog-trace.json", slog::SlogTraceConfig::kTrackScopesAndLogs);
 
   // Actual code with slogs body.
   {
@@ -26,8 +26,8 @@ int main() {
       SLOG_SCOPE("iteration-" + std::to_string(i) + "-of-" +
                  std::to_string(kNumIterations));
       const int sleep_us = (i + 1) * 100;
-      SLOG(INFO) << "iteration #" << i << ", sleeping " << slog::SlogTag("sleep_us", sleep_us)
-                 << " microseconds...";
+      SLOG(INFO) << "iteration #" << i << ", sleeping "
+                 << slog::SlogTag("sleep_us", sleep_us) << " microseconds...";
       SLOG_SCOPE("Sleep scope").addTag("sleep_us", sleep_us);
       usleep(sleep_us);
     }
