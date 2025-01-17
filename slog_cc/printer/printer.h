@@ -15,6 +15,7 @@
 #ifndef slog_cc_printer_printer
 #define slog_cc_printer_printer
 
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <vector>

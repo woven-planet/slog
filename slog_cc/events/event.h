@@ -15,6 +15,8 @@
 #ifndef slog_cc_events_event
 #define slog_cc_events_event
 
+#include <cstdint>
+
 #include "slog_cc/context/context.h"
 #include "slog_cc/primitives/record.h"
 #include "slog_cc/primitives/tag.h"

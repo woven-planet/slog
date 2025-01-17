@@ -15,6 +15,7 @@
 #ifndef slog_cc_primitives_tag
 #define slog_cc_primitives_tag
 
+#include <cstdint>
 #include <string>
 #include <utility>
 

@@ -15,6 +15,7 @@
 #ifndef slog_cc_primitives_record
 #define slog_cc_primitives_record
 
+#include <cstdint>
 #include <string>
 #include <utility>
 #include <vector>

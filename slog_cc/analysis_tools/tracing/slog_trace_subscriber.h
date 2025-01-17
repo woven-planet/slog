@@ -15,6 +15,7 @@
 #ifndef slog_cc_analysis_tools_tracing_slog_trace_subscriber
 #define slog_cc_analysis_tools_tracing_slog_trace_subscriber
 
+#include <cstdint>
 #include <cstring>
 #include <fstream>
 #include <map>
