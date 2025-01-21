@@ -15,6 +15,8 @@
 #ifndef slog_cc_primitives_timestamps
 #define slog_cc_primitives_timestamps
 
+#include <cstdint>
+
 namespace slog {
 
 enum class SlogGlobalClockTypeId {

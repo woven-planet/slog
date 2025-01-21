@@ -16,6 +16,7 @@
 #define slog_cc_context_context
 
 #include <cassert>
+#include <cstdint>
 #include <functional>
 #include <shared_mutex>
 #include <thread>
