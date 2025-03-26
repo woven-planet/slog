@@ -13,6 +13,7 @@
 // limitations under the License.
 
 // NOLINT(namespace-avsoftware)
+#include <cstdint>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
