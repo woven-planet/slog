@@ -56,5 +56,8 @@ cc_library(
 py_library(
     name = "slog_py",
     deps = ["//slog_py"],
-    imports = ["slog"],
+    # We want slog to be imported as `from slog_py import slog` but slog_py is
+    # inside `slog` subdirectory so slog_py won't be visible by default. We add
+    # `slog` prefix into PYTHONPATH by adding `.` to the imports.
+    imports = ["."],
 )
