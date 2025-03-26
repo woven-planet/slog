@@ -37,7 +37,7 @@ cc_library(
     #   * add `include_prefix` to put all C++ slog include files behind slog_cc
     #     prefix dir.
     # Note: it sounds like using `strip_include_prefix` and `include_prefix`
-    # with same value doesn't make sense, but if we remove there params user
+    # with same value doesn't make sense, but if we remove these params user
     # project will not be able to see slog .h files for some reason.
     include_prefix = "slog_cc",
     includes = ["slog_cc"],
