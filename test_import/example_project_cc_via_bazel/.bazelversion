@@ -1,6 +1,6 @@
-# TODO(vsbus): update this test as improt via bazel5. Add a newer test with Bzlmod in bazel8.
 5.4.0
 # NOTE: next version 6.0.0 was causing build failure due to using googletest
 # 1.10, it was transitively using bazel_tools platform in the old way and
 # starting from 6.0.0 it isn't supported. To upgrade bazel we would need to
 # upgrade dependencies.
+# TODO(vsbus): update this test as improt via bazel5. Add a newer test with Bzlmod in bazel8.
