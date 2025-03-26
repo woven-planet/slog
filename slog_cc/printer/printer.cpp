@@ -44,15 +44,15 @@ class SlogPrinter::Impl {
  public:
   Impl() {}
 
-  std::string debugString(const SlogTag& tag) {
+  std::string debugString(const SlogTag& tag) const {
     return "{\n  " + util::join(keyValueStrings(tag), ",\n  ") + ",\n}\n";
   }
 
-  std::string jsonString(const SlogTag& tag) {
+  std::string jsonString(const SlogTag& tag) const {
     return "{" + util::join(keyValueStrings(tag), ", ") + "}";
   }
 
-  std::string debugString(const SlogRecord& record) {
+  std::string debugString(const SlogRecord& record) const {
     std::stringstream s;
     s << "\nthread_id_: " << record.thread_id();
     s << "\ncall_site_id_: " << record.call_site_id();
@@ -65,7 +65,7 @@ class SlogPrinter::Impl {
     return s.str();
   }
 
-  std::string jsonString(const SlogRecord& record) {
+  std::string jsonString(const SlogRecord& record) const {
     std::vector<std::string> kv_strings;
     kv_strings.push_back(keyValueString("thread_id", record.thread_id()));
     kv_strings.push_back(keyValueString("call_site_id", record.call_site_id()));
@@ -93,7 +93,7 @@ class SlogPrinter::Impl {
     return "{" + util::join(kv_strings, ", ") + "}";
   }
 
-  std::string slogText(const SlogRecord& record) {
+  std::string slogText(const SlogRecord& record) const {
     std::string res;
     for (const auto& tag : record.tags()) {
       if (tag.verbosity() == SlogTagVerbosity::kSilent) {
@@ -108,7 +108,7 @@ class SlogPrinter::Impl {
     return res;
   }
 
-  std::string flatText(const SlogRecord& record) {
+  std::string flatText(const SlogRecord& record) const {
     std::string res;
     for (const auto& tag : record.tags()) {
       if (tag.verbosity() == SlogTagVerbosity::kSilent) {
@@ -134,7 +134,7 @@ class SlogPrinter::Impl {
   std::string formatStderrLine(uint8_t severity, int month, int day, int hour,
                                int minute, double second, int thread_id,
                                const std::string& file_name, int lineno,
-                               const std::string& msg) {
+                               const std::string& msg) const {
     constexpr char severities[] = "UDIWEF";
     return util::stringPrintf("%c%02d%02d %02d:%02d:%09.6lf %d %s:%d] %s",
                               severities[severity], month, day, hour, minute,
@@ -142,7 +142,7 @@ class SlogPrinter::Impl {
                               msg.c_str());
   }
 
-  std::string stderrLine(const SlogRecord& r, const SlogCallSite& cs) {
+  std::string stderrLine(const SlogRecord& r, const SlogCallSite& cs) const {
     // TODO(vsbus): improve perf ot emitStderrLine(). It regressed 1.5x
     // comparing to using GLOG directly.
     const auto now = [&r] {
@@ -179,13 +179,13 @@ class SlogPrinter::Impl {
                             thread_id, file_name, lineno, msg);
   }
 
-  void emitStderrLine(const SlogRecord& r, const SlogCallSite& cs) {
+  void emitStderrLine(const SlogRecord& r, const SlogCallSite& cs) const {
     // TODO(vsbus): make emitStderr thread-safe by adding locks around printing
     // the line.
     std::cerr << stderrLine(r, cs) << std::endl;
   }
 
-  std::string renderLine(const Line& line) {
+  std::string renderLine(const Line& line) const {
     SLOG_ASSERT(line.size() == kTableSchema.size());
     std::vector<std::string> rendered_line;
     const size_t n = line.size();
@@ -205,7 +205,7 @@ class SlogPrinter::Impl {
     return res;
   };
 
-  std::vector<std::string> tableSplitter() {
+  std::vector<std::string> tableSplitter() const {
     Line splitter;
     for (const auto& field : kTableSchema) {
       splitter.emplace_back(std::string(field.width, '-'));
@@ -213,7 +213,7 @@ class SlogPrinter::Impl {
     return {renderLine(splitter)};
   }
 
-  std::vector<std::string> tableHeader() {
+  std::vector<std::string> tableHeader() const {
     Line header;
     for (const auto& field : kTableSchema) {
       header.emplace_back(field.name);
@@ -222,7 +222,7 @@ class SlogPrinter::Impl {
   }
 
   std::vector<std::string> tableRow(const SlogRecord& record,
-                                    const SlogCallSite& call_site) {
+                                    const SlogCallSite& call_site) const {
     size_t num_lines = 0;
     for (const auto& field : kTableSchema) {
       num_lines = std::max(num_lines, field.func(record, call_site).size());
@@ -355,55 +355,55 @@ std::string SlogPrinter::formatStderrLine(uint8_t severity, int month, int day,
                                           int hour, int minute, double second,
                                           int thread_id,
                                           const std::string& file_name,
-                                          int lineno, const std::string& msg) {
+                                          int lineno, const std::string& msg) const {
   return impl_->formatStderrLine(severity, month, day, hour, minute, second,
                                  thread_id, file_name, lineno, msg);
 }
 
 std::string SlogPrinter::stderrLine(const SlogRecord& record,
-                                    const SlogCallSite& call_site) {
+                                    const SlogCallSite& call_site) const {
   return impl_->stderrLine(record, call_site);
 }
 
 void SlogPrinter::emitStderrLine(const SlogRecord& record,
-                                 const SlogCallSite& call_site) {
+                                 const SlogCallSite& call_site) const {
   return impl_->emitStderrLine(record, call_site);
 }
 
-std::vector<std::string> SlogPrinter::tableSplitter() {
+std::vector<std::string> SlogPrinter::tableSplitter() const {
   return impl_->tableSplitter();
 }
 
-std::vector<std::string> SlogPrinter::tableHeader() {
+std::vector<std::string> SlogPrinter::tableHeader() const {
   return impl_->tableHeader();
 }
 
 std::vector<std::string> SlogPrinter::tableRow(const SlogRecord& record,
-                                               const SlogCallSite& call_site) {
+                                               const SlogCallSite& call_site) const {
   return impl_->tableRow(record, call_site);
 }
 
-std::string SlogPrinter::flatText(const SlogRecord& record) {
+std::string SlogPrinter::flatText(const SlogRecord& record) const {
   return impl_->flatText(record);
 }
 
-std::string SlogPrinter::slogText(const SlogRecord& record) {
+std::string SlogPrinter::slogText(const SlogRecord& record) const {
   return impl_->slogText(record);
 }
 
-std::string SlogPrinter::debugString(const SlogRecord& record) {
+std::string SlogPrinter::debugString(const SlogRecord& record) const {
   return impl_->debugString(record);
 }
 
-std::string SlogPrinter::debugString(const SlogTag& tag) {
+std::string SlogPrinter::debugString(const SlogTag& tag) const {
   return impl_->debugString(tag);
 }
 
-std::string SlogPrinter::jsonString(const SlogRecord& record) {
+std::string SlogPrinter::jsonString(const SlogRecord& record) const {
   return impl_->jsonString(record);
 }
 
-std::string SlogPrinter::jsonString(const SlogTag& tag) {
+std::string SlogPrinter::jsonString(const SlogTag& tag) const {
   return impl_->jsonString(tag);
 }
 
