@@ -56,4 +56,5 @@ cc_library(
 py_library(
     name = "slog_py",
     deps = ["//slog_py"],
+    imports = ["slog"],
 )
