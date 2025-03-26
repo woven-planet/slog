@@ -1,6 +1,1 @@
 build --cxxopt='-std=c++14'
-
-# TODO(vsbus): remove this flag, update repo to work with Bzlmod but also add import examples with
-# WORKSPACE that installs old (v7) bazel and anoter with Bzlmod and new (v9) bazel.
-build --incompatible_enable_workspace_file
-
