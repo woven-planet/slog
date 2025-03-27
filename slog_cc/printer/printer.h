@@ -33,24 +33,24 @@ class SlogPrinter {
   std::string formatStderrLine(uint8_t severity, int month, int day, int hour,
                                int minute, double second, int thread_id,
                                const std::string& file_name, int lineno,
-                               const std::string& msg);
+                               const std::string& msg) const;
   std::string stderrLine(const SlogRecord& record,
-                         const SlogCallSite& call_site);
-  void emitStderrLine(const SlogRecord& record, const SlogCallSite& call_site);
+                         const SlogCallSite& call_site) const;
+  void emitStderrLine(const SlogRecord& record, const SlogCallSite& call_site) const;
 
-  std::vector<std::string> tableSplitter();
-  std::vector<std::string> tableHeader();
+  std::vector<std::string> tableSplitter() const;
+  std::vector<std::string> tableHeader() const;
   std::vector<std::string> tableRow(const SlogRecord& record,
-                                    const SlogCallSite& call_site);
+                                    const SlogCallSite& call_site) const;
 
-  std::string flatText(const SlogRecord& record);
-  std::string slogText(const SlogRecord& record);
+  std::string flatText(const SlogRecord& record) const;
+  std::string slogText(const SlogRecord& record) const;
 
-  std::string debugString(const SlogRecord& record);
-  std::string debugString(const SlogTag& tag);
+  std::string debugString(const SlogRecord& record) const;
+  std::string debugString(const SlogTag& tag) const;
 
-  std::string jsonString(const SlogRecord& record);
-  std::string jsonString(const SlogTag& tag);
+  std::string jsonString(const SlogRecord& record) const;
+  std::string jsonString(const SlogTag& tag) const;
 
  private:
   class Impl;
