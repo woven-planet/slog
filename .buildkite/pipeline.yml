@@ -102,7 +102,9 @@ steps:
       queue: cpu-small
     commands:
       - "sudo apt update"
-      - "sudo apt install zip -y"
+      - "sudo apt install zip g++-8 -y"
+      - "sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /usr/bin/g++ g++ /usr/bin/g++-7"
+      - "sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8"
       - "pkg_slog_repo_zip/zip_and_upload_to_artifactory.sh $(cat VERSION).${BUILDKITE_BUILD_NUMBER}"
     retry:
       <<: *retries
@@ -117,7 +119,9 @@ steps:
     commands:
       - "scripts/setup_dev_env.sh"
       - "sudo apt update"
-      - "sudo apt install twine -y"
+      - "sudo apt install twine g++-8 -y"
+      - "sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /usr/bin/g++ g++ /usr/bin/g++-7"
+      - "sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8"
       - "cd pkg_slog_py_wheel"
       - "./prepare_build.sh $(cat ../VERSION).${BUILDKITE_BUILD_NUMBER}"
       - "./pypi_nexus_login.sh"
